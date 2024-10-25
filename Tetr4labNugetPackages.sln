@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4lab", "Tetr4lab\Tetr4lab.csproj", "{8C3939EF-462D-4EDD-8A87-598E04609E05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labRazor", "Tetr4labRazor\Tetr4labRazor.csproj", "{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C3939EF-462D-4EDD-8A87-598E04609E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C3939EF-462D-4EDD-8A87-598E04609E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C3939EF-462D-4EDD-8A87-598E04609E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C3939EF-462D-4EDD-8A87-598E04609E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C0859AF-A72B-4A4F-A3F2-484C724BFA81}
+	EndGlobalSection
+EndGlobal

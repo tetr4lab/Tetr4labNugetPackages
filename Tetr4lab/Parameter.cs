@@ -1,6 +1,4 @@
-﻿//	Copyright© tetr4lab.
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Tetr4lab;
 

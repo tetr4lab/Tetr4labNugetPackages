@@ -1,6 +1,4 @@
-﻿//	Copyright© tetr4lab.
-
-namespace Tetr4lab;
+﻿namespace Tetr4lab;
 
 /// <summary>タスク拡張</summary>
 public static class TaskEx {

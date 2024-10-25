@@ -1,5 +1,4 @@
-﻿//	Copyright© tetr4lab.
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace Tetr4lab;
 

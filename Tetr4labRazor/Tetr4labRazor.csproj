@@ -10,12 +10,14 @@
     <PackageProjectUrl>https://tetr4lab.nyanta.jp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Title>tetr4lab</Title>
+    <Title>tetr4lab razor</Title>
     <Authors>$(AssemblyName).</Authors>
     <Company>$(Authors).</Company>
     <Description>a private library for blazor</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageId></PackageId>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Version>1.0.2</Version>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +26,7 @@
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="del &quot;$(SolutionDir)Packages\Tetr4labRazor.*.nupkg&quot;" />
-        <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --output &quot;$(SolutionDir)Packages&quot;" />
+        <Exec Command="dotnet pack --no-build --output &quot;$(SolutionDir)Packages&quot;" />
     </Target>
 
     <ItemGroup>

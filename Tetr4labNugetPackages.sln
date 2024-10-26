@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4lab", "Tetr4lab\Tetr4lab.csproj", "{8C3939EF-462D-4EDD-8A87-598E04609E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tetr4lab", "Tetr4lab\Tetr4lab.csproj", "{8C3939EF-462D-4EDD-8A87-598E04609E05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labRazor", "Tetr4labRazor\Tetr4labRazor.csproj", "{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tetr4labRazor", "Tetr4labRazor\Tetr4labRazor.csproj", "{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labDatabase", "Tetr4labDatabase\Tetr4labDatabase.csproj", "{4A8C9121-78DD-44A7-8D68-34C94ABDF55A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F9BA2B3-268C-43D7-BAF7-25E0C607D155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

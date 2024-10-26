@@ -1,7 +1,6 @@
 ﻿using PetaPoco;
-using Tetr4lab;
 
-namespace RabbitBalance.Services;
+namespace Tetr4lab;
 
 /// <summary>アカウントクラス</summary>
 public sealed class Account {
@@ -22,6 +21,7 @@ public sealed class Account {
     static Account () => LoadAsync ();
 
     /// <summary>読み込み</summary>
+    /// <exception cref="MyDataSetException"></exception>
     private static async void LoadAsync () {
         await TaskEx.DelayUntil (() => connectionString is not null);
         using (var database = (Database) new MySqlDatabase (connectionString!, "MySqlConnector")) {
@@ -52,8 +52,12 @@ group by users.email
     /// <summary>ポリシーに属するメール</summary>
     public static Dictionary<string, string []> EmailsInPolicy = new ();
 
+    /// <summary>メールアドレス</summary>
     [Column ("email")] public string Email { get; set; } = "";
+    /// <summary>名前</summary>
     [Column ("name")] public string Name { get; set; } = "";
+    /// <summary>通称</summary>
     [Column ("common_name")] public string CommonName { get; set; } = "";
+    /// <summary>ポリシー</summary>
     [Column ("policies")] public string Policies { get; set; } = "";
 }

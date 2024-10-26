@@ -45,6 +45,7 @@ public static partial class RevisionInfo {
     private const string ResourceName = "revision.info";
 
     /// <summary>初期化</summary>
+    /// <param name="asm">アセンブリ</param>
     private static void Initialize (Assembly? asm) {
         if (asm is null) { return; }
         var resName = asm.GetManifestResourceNames ().ToList ().Find (n => n.EndsWith (ResourceName));

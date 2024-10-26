@@ -1,33 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Reflection;
-using MudBlazor;
 using MySqlConnector;
 using PetaPoco;
-using RabbitBalance.Data;
 
-namespace RabbitBalance.Services;
+namespace Tetr4lab;
 
-/// <summary></summary>
-public sealed class BalanceDataSet {
+/// <summary>基礎的なデータセット</summary>
+public class BasicDataSet {
 
     /// <summary>待機間隔</summary>
-    public const int WaitInterval = 1000 / 60;
+    public virtual int WaitInterval => 1000 / 60;
 
     /// <summary>ロードでエラーした場合の最大試行回数</summary>
-    private const int MaxRetryCount = 10;
+    protected virtual int MaxRetryCount => 10;
 
     /// <summary>ロードでエラーした場合のリトライ間隔</summary>
-    private const int RetryInterval = 1000 / 30;
+    protected virtual int RetryInterval => 1000 / 30;
 
     /// <summary>PetaPocoをDI</summary>
-    private Database database { get; set; }
+    protected virtual Database database { get; set; }
 
     /// <summary>データベース名</summary>
-    private string databaseName;
+    protected string databaseName;
 
     /// <summary>コンストラクタ</summary>
-    public BalanceDataSet (Database database) {
+    public BasicDataSet (Database database) {
         this.database = database;
         var words = database.ConnectionString.Split (['=', ';']);
         var index = Array.IndexOf (words, "database");
@@ -38,10 +35,10 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>初期化</summary>
-    public async Task InitializeAsync (int? year = null, int? month = null) {
+    public virtual async Task InitializeAsync () {
         if (!IsInitialized) {
             try {
-                await LoadAsync (year, month);
+                await LoadAsync ();
                 IsInitialized = true;
             }
             catch (Exception e) {
@@ -53,17 +50,19 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>初期化済み</summary>
-    public bool IsInitialized { get; private set; }
+    public virtual bool IsInitialized { get; protected set; }
 
     /// <summary>初期化が済み、ロード中でない</summary>
-    public bool IsReady => IsInitialized && !isLoading;
+    public virtual bool IsReady => IsInitialized && !isLoading;
 
     /// <summary>初期化に失敗</summary>
-    public bool IsUnavailable { get; private set; }
+    public virtual bool IsUnavailable { get; protected set; }
 
     /// <summary>(再)読み込み</summary>
     /// <remarks>既に読み込み中なら単に完了を待って戻る、再読み込み中でも以前のデータが有効</remarks>
-    public async Task LoadAsync (int? year = null, int? month = null) {
+    /// <returns></returns>
+    /// <exception cref="TimeoutException"></exception>
+    public virtual async Task LoadAsync () {
         if (isLoading) {
             while (isLoading) {
                 await Task.Delay (WaitInterval);
@@ -72,7 +71,7 @@ public sealed class BalanceDataSet {
         }
         isLoading = true;
         for (var i = 0; i < MaxRetryCount; i++) {
-            var result = await GetListSetAsync (year, month);
+            var result = await GetListSetAsync ();
             if (result.IsSuccess) {
                 isLoading = false;
                 return;
@@ -81,35 +80,13 @@ public sealed class BalanceDataSet {
         }
         throw new TimeoutException ("The maximum number of retries for LoadAsync was exceeded.");
     }
-    private bool isLoading;
+    /// <summary>ロード中</summary>
+    protected bool isLoading;
 
     /// <summary>指定クラスのモデルインスタンスを取得</summary>
-    public List<T> GetAll<T> (int? year = null, int? month = null) where T : class => (
-        typeof (T) == typeof (Partner) ? Partners.Filter (year, month) as List<T> :
-        typeof (T) == typeof (Sale) ? Sales.Filter (year, month) as List<T> :
-        typeof (T) == typeof (Payment) ? Payments.Filter (year, month) as List<T> :
-        typeof (T) == typeof (MonthlyBalance) ? MonthlyBalances.Filter (year, month) as List<T> :
-        typeof (T) == typeof (YearMonth) ? YearMonths.Filter (year, month) as List<T> :
-        null
-    ) ?? new ();
-
-    /// <summary>ロード済みのモデルインスタンス</summary>
-    public List<Partner> Partners { get; private set; } = new ();
-
-    /// <summary>ロード済みのモデルインスタンス</summary>
-    public List<Sale> Sales { get; private set; } = new ();
-
-    /// <summary>ロード済みのモデルインスタンス</summary>
-    public List<Payment> Payments { get; private set; } = new ();
-
-    /// <summary>ロード済みのモデルインスタンス</summary>
-    public List<MonthlyBalance> MonthlyBalances { get; private set; } = new ();
-
-    /// <summary>ロード済みのモデルインスタンス</summary>
-    public List<YearMonth> YearMonths { get; private set; } = new ();
-
-    /// <summary>有効性の検証</summary>
-    public bool Valid => IsReady && Partners is not null && Sales is not null && Payments is not null && MonthlyBalances is not null && YearMonths is not null;
+    /// <typeparam name="T">取得するモデルクラス</typeparam>
+    /// <returns>取得したモデルインスタンス</returns>
+    public virtual List<T> GetAll<T> () where T : class => new ();
 
     /// <summary>SQLで使用するテーブル名またはカラム名を得る</summary>
     /// <param name="name">プロパティ名</param>
@@ -124,9 +101,12 @@ public sealed class BalanceDataSet {
         }
     }
 
-    /// <summary>更新用カラム&値SQL</summary>
+    /// <summary>更新用カラム&amp;値SQL</summary>
     /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
-    private string GetSettingSql<T> (bool withId = false) where T : class {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="withId"></param>
+    /// <returns></returns>
+    protected virtual string GetSettingSql<T> (bool withId = false) where T : class {
         var result = string.Empty;
         var properties = typeof (T).GetProperties (BindingFlags.Instance | BindingFlags.Public);
         if (properties != null) {
@@ -143,6 +123,10 @@ public sealed class BalanceDataSet {
 
     /// <summary>追加用値SQL</summary>
     /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="index"></param>
+    /// <param name="withId"></param>
+    /// <returns></returns>
     public string GetValuesSql<T> (int index = -1, bool withId = false) where T : class {
         var result = string.Empty;
         var properties = typeof (T).GetProperties (BindingFlags.Instance | BindingFlags.Public);
@@ -160,6 +144,9 @@ public sealed class BalanceDataSet {
 
     /// <summary>追加用カラムSQL</summary>
     /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="withId"></param>
+    /// <returns></returns>
     public string GetColumnsSql<T> (bool withId = false) where T : class {
         var result = string.Empty;
         var properties = typeof (T).GetProperties (BindingFlags.Instance | BindingFlags.Public);
@@ -176,6 +163,10 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>必須項目のチェック</summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <param name="withId"></param>
+    /// <returns></returns>
     public static bool EntityIsValid<T> (T? item, bool withId = false) where T : BaseModel<T>, new() {
         if (item == null || withId && (item.Id <= 0 || item.Modified == default)) { return false; }
         var properties = new List<PropertyInfo> ();
@@ -203,7 +194,11 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>アイテムリストから辞書型パラメータを生成する</summary>
-    private Dictionary<string, object?> GetParamDictionary<T> (IEnumerable<T> values, bool withId = false) {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="values"></param>
+    /// <param name="withId"></param>
+    /// <returns></returns>
+    protected virtual Dictionary<string, object?> GetParamDictionary<T> (IEnumerable<T> values, bool withId = false) {
         var parameters = new Dictionary<string, object?> ();
         var prpperties = new List<PropertyInfo> ();
         foreach (var property in typeof (T).GetProperties (BindingFlags.Instance | BindingFlags.Public) ?? []) {
@@ -227,40 +222,19 @@ public sealed class BalanceDataSet {
     /// <typeparam name="T">返す値の型</typeparam>
     /// <param name="process">処理</param>
     /// <returns>成功またはエラーの状態と値のセット</returns>
-    public async Task<Result<T>> ProcessAndCommitAsync<T> (Func<Task<T>> process)
+    public virtual async Task<Result<T>> ProcessAndCommitAsync<T> (Func<Task<T>> process)
         => await database.ProcessAndCommitAsync (process);
 
     /// <summary>一覧セットをアトミックに取得</summary>
-    public async Task<Result<bool>> GetListSetAsync (int? year = null, int? month = null) {
-        var result = await ProcessAndCommitAsync (async () => {
-            var partbners = await database.FetchAsync<Partner> (Partner.FilteredSelectSql (year, month));
-            var sales = await database.FetchAsync<Sale> (Sale.FilteredSelectSql (year, month));
-            var dividends = await database.FetchAsync<Payment> (Payment.FilteredSelectSql (year, month));
-            var balances = await database.FetchAsync<MonthlyBalance> (MonthlyBalance.FilteredSelectSql (year, month));
-            var yearmonths = await database.FetchAsync<YearMonth> (YearMonth.FilteredSelectSql (year, month));
-            if (partbners is not null && sales is not null && dividends is not null && balances is not null) {
-                Partners = partbners;
-                Sales = sales;
-                Payments = dividends;
-                MonthlyBalances = balances;
-                YearMonths = yearmonths;
-                Partner.InitTable (this);
-                Sale.InitTable (this);
-                Payment.InitTable (this);
-                MonthlyBalance.InitTable (this);
-                YearMonth.InitTable (this);
-                return true;
-            }
-            return false;
-        });
-        if (result.IsSuccess && !result.Value) {
-            result.Status = Status.Unknown;
-        }
-        return result;
-    }
+    /// <returns></returns>
+    public virtual async Task<Result<bool>> GetListSetAsync ()
+        => await Task.FromResult<Result<bool>> (new (Status.Success, true));
 
     /// <summary>単一アイテムを取得 (Idで特定) 【注意】総リストとは別オブジェクトになる</summary>
-    public async Task<Result<T?>> GetItemByIdAsync<T> (T item) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public virtual async Task<Result<T?>> GetItemByIdAsync<T> (T item) where T : BaseModel<T>, new() {
         var table = GetSqlName<T> ();
         return await ProcessAndCommitAsync (async () => (await database.FetchAsync<T?> (
             $"select {table}.* from {table} where {table}.Id = @Id;",
@@ -269,7 +243,10 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>アイテムの更新サブ処理 トランザクション内専用</summary>
-    private async Task<int> UpdateItemAsync<T> (T item) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    protected virtual async Task<int> UpdateItemAsync<T> (T item) where T : BaseModel<T>, new() {
         var table = GetSqlName<T> ();
         return await database.ExecuteAsync (
             @$"update {table} set {GetSettingSql<T> ()} where {table}.Id = @Id",
@@ -278,7 +255,10 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>アイテムの更新</summary>
-    public async Task<Result<int>> UpdateAsync<T> (T item) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public virtual async Task<Result<int>> UpdateAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
             item.Version++;
             return await UpdateItemAsync<T> (item);
@@ -290,7 +270,10 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>単一アイテムの追加</summary>
-    public async Task<Result<T>> AddAsync<T> (T item) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public virtual async Task<Result<T>> AddAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
             item.Id = await database.ExecuteScalarAsync<int> (
                 @$"insert into {GetSqlName<T> ()} ({GetColumnsSql<T> ()}) values ({GetValuesSql<T> ()});
@@ -312,7 +295,11 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>単一アイテムの削除</summary>
-    public async Task<Result<int>> RemoveAsync<T> (T item) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    /// <exception cref="MyDataSetException"></exception>
+    public virtual async Task<Result<int>> RemoveAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
             var original = await GetItemByIdAsync<T> (item);
             if (original.IsSuccess && original.Value != null) {
@@ -337,7 +324,10 @@ public sealed class BalanceDataSet {
 
     /// <summary>テーブルの次の自動更新値を得る</summary>
     /// <remarks>MySQL/MariaDBに依存</remarks>
-    public async Task<long> GetAutoIncremantValueAsync<T> () where T : class {
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    public virtual async Task<long> GetAutoIncremantValueAsync<T> () where T : class {
         // 開始Idを取得
         var Id = 0L;
         try {
@@ -374,7 +364,11 @@ public sealed class BalanceDataSet {
     }
 
     /// <summary>一括アイテムの追加</summary>
-    public async Task<Result<int>> AddRangeAsync<T> (IEnumerable<T> items) where T : BaseModel<T>, new() {
+    /// <typeparam name="T"></typeparam>
+    /// <param name="items"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
+    public virtual async Task<Result<int>> AddRangeAsync<T> (IEnumerable<T> items) where T : BaseModel<T>, new() {
         if (items.Count () <= 0) { return new Result<int> (Status.MissingEntry, 0); }
         var result = await ProcessAndCommitAsync (async () => {
             // 開始Idを取得
@@ -403,45 +397,7 @@ public sealed class BalanceDataSet {
 
 }
 
-public static class DatabaseHelper {
-    /// <summary>処理を実行しコミットする、例外またはエラーがあればロールバックする</summary>
-    /// <typeparam name="T">返す値の型</typeparam>
-    /// <param name="process">処理</param>
-    /// <returns>成功またはエラーの状態と値のセット</returns>
-    public static async Task<Result<T>> ProcessAndCommitAsync<T> (this Database database, Func<Task<T>> process) {
-        var result = default (T)!;
-        await database.BeginTransactionAsync ();
-        try {
-            result = await process ();
-            await database.CompleteTransactionAsync ();
-            return new (Status.Success, result);
-        }
-        catch (Exception ex) when (ex.IsDeadLock ()) {
-            await database.AbortTransactionAsync ();
-            // デッドロックならエスカレート
-            throw;
-        }
-        catch (Exception ex) when (ex.TryGetStatus (out var status)) {
-            // エラー扱いの例外
-            await database.AbortTransactionAsync ();
-            System.Diagnostics.Debug.WriteLine (ex);
-            if (status == Status.CommandTimeout) {
-                // タイムアウトならエスカレート
-                throw;
-            }
-            return new (status, result);
-        }
-        catch (Exception) {
-            await database.AbortTransactionAsync ();
-            throw;
-        }
-    }
-
-    /// <summary>一覧を取得</summary>
-    public static async Task<Result<List<T>>> GetListAsync<T> (this Database database, string sql, params object [] args)
-        => await ProcessAndCommitAsync (database, async () => await database.FetchAsync<T> (sql, args));
-}
-
+/// <summary>例外をエラーに変換するクラス</summary>
 public static class ExceptionToErrorHelper {
     /// <summary>例外メッセージからエラーへの変換</summary>
     internal static readonly Dictionary<(Type type, string message), Status> ExceptionToErrorDictionary = new () {
@@ -459,6 +415,9 @@ public static class ExceptionToErrorHelper {
         { (typeof (MySqlException), "Data too long for column"), Status.DataTooLong },
     };
     /// <summary>例外がエラーか判定して該当するエラー状態を出力する</summary>
+    /// <param name="ex"></param>
+    /// <param name="status"></param>
+    /// <returns></returns>
     public static bool TryGetStatus (this Exception ex, out Status status) {
         foreach (var pair in ExceptionToErrorDictionary) {
             if (ex.GetType () == pair.Key.type && ex.Message.StartsWith (pair.Key.message, StringComparison.CurrentCultureIgnoreCase)) {
@@ -470,84 +429,18 @@ public static class ExceptionToErrorHelper {
         return false;
     }
     /// <summary>例外はデッドロックである</summary>
+    /// <param name="ex"></param>
+    /// <returns></returns>
     public static bool IsDeadLock (this Exception ex) => ex is MySqlException && ex.Message.StartsWith ("Deadlock found");
     /// <summary>逆引き</summary>
+    /// <param name="status"></param>
+    /// <returns></returns>
     public static Exception GetException (this Status status) {
         if (ExceptionToErrorDictionary.ContainsValue (status)) {
             return new MyDataSetException (ExceptionToErrorDictionary.First (p => p.Value == status).Key.message);
         }
         return new Exception ("Unknown exception");
     }
-}
-
-public static class StatusHelper {
-    /// <summary>結果の状態の名前</summary>
-    private static readonly Dictionary<Status, string> StatusNameDictionary;
-    /// <summary>コンストラクタ</summary>
-    static StatusHelper () {
-        StatusNameDictionary = new () {
-            { Status.Success, "成功" },
-            { Status.Unknown, "不詳の失敗" },
-            { Status.MissingEntry, "エントリの消失" },
-            { Status.DuplicateEntry, "エントリの重複" },
-            { Status.CommandTimeout, "タイムアウト" },
-            { Status.VersionMismatch, "バージョンの不整合" },
-            { Status.ForeignKeyConstraintFails, "外部キー制約の違反" },
-            { Status.DeadlockFound, "デッドロック" },
-            { Status.DataTooLong, "サイズ超過" },
-        };
-    }
-    /// <summary>結果の状態の名前</summary>
-    public static string GetName (this Status status)
-        => StatusNameDictionary .ContainsKey (status)
-        ? StatusNameDictionary [status]
-        : throw new ArgumentOutOfRangeException ($"Invalid status value {status}.");
-    /// <summary>結果の一覧から最初に見つかった失敗状態を返す、失敗がなければ成功を返す</summary>
-    public static Status FirstFailedState<T> (this List<Result<T>> results)
-        => results.Find (r => r.IsFatal)?.Status ?? results.Find (r => r.IsFailure)?.Status ?? Status.Success;
-}
-
-/// <summary>結果の状態</summary>
-public enum Status {
-    /// <summary>成功</summary>
-    Success = default,
-    /// <summary>不詳の失敗</summary>
-    Unknown,
-    /// <summary>エントリの消失</summary>
-    MissingEntry,
-    /// <summary>エントリの重複</summary>
-    DuplicateEntry,
-    /// <summary>タイムアウト</summary>
-    CommandTimeout,
-    /// <summary>バージョンの不整合</summary>
-    VersionMismatch,
-    /// <summary>外部キー制約の違反</summary>
-    ForeignKeyConstraintFails,
-    /// <summary>デッドロック</summary>
-    DeadlockFound,
-    /// <summary>サイズ超過</summary>
-    DataTooLong,
-}
-
-/// <summary>結果の状態と値</summary>
-public class Result<T> {
-    public Status Status { get; internal set; }
-    public T Value { get; init; } = default!;
-    public string StatusName => Status.GetName ();
-    internal Result () { }
-    internal Result (Status status, T value) { Status = status; Value = value; }
-    /// <summary>成功である</summary>
-    public bool IsSuccess => Status == Status.Success;
-    /// <summary>失敗である</summary>
-    public bool IsFailure => Status != Status.Success;
-    /// <summary>致命的である</summary>
-    public bool IsFatal => Status == Status.CommandTimeout || Status == Status.DeadlockFound;
-    /// <summary>成功なら値、失敗なら例外</summary>
-    public T ValueOrThrow => IsSuccess ? Value : throw new NotSupportedException (Status.ToString ());
-    /// <summary>逆引き</summary>
-    public Exception Exception => Status.GetException ();
-    /// <summary>文字列化</summary>
-    public override string ToString () => $"{{{Status}: {Value}}}";
 }
 
 /// <summary>内部で使用する例外</summary>
@@ -562,5 +455,6 @@ internal class MyDataSetException : Exception {
 /// <remarks>計算列から(PetaPocoにマッピングさせて)取り込むが、フィールドが実在しないので書き出さない</remarks>
 [AttributeUsage (AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 public class VirtualColumnAttribute : Attribute {
+    /// <summary>仮想カラム属性</summary>
     public VirtualColumnAttribute () { }
 }

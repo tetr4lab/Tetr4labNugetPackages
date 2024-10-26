@@ -1,7 +1,8 @@
-﻿//	Copyright© tetr4lab.
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 
 namespace Tetr4lab;
+
+/// <summary>セッションカウンタ</summary>
 public partial class SessionCounter : ComponentBase, IDisposable {
     /**
     * <summary>セッションカウンタを表示するコンポーネントとセッション数の更新通知サービス</summary>
@@ -30,6 +31,8 @@ public partial class SessionCounter : ComponentBase, IDisposable {
     protected static Dictionary<ComponentBase, Action> _subscribers { get; set; } = new Dictionary<ComponentBase, Action> ();
 
     /// <summary>登録/削除と全体更新</summary>
+    /// <param name="newOne"></param>
+    /// <param name="remove"></param>
     protected static void UpdateAll (SessionCounter newOne, bool remove = false) {
         if (_instances.Contains (newOne) == remove) {
             if (remove) {
@@ -47,9 +50,12 @@ public partial class SessionCounter : ComponentBase, IDisposable {
     }
 
     /// <summary>購読開始</summary>
+    /// <param name="component"></param>
+    /// <param name="listener"></param>
     public static void Subscribe (ComponentBase component, Action listener) => _subscribers.Add (component, listener);
 
     /// <summary>購読解除</summary>
+    /// <param name="component"></param>
     public static void Unsubscribe (ComponentBase component) => _subscribers.Remove (component);
 
     /// <summary>初期化</summary>

@@ -2,6 +2,7 @@
 
 namespace Tetr4lab;
 
+/// <summary>汎用パラメータ辞書</summary>
 public static partial class ParameterHelper {
     /// <summary>汎用パラメータ辞書に該当の値が存在する</summary>
     /// <typeparam name="T">値の型</typeparam>

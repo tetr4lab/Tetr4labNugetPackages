@@ -22,9 +22,9 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-    <Target Name="CustomAfterPublish" AfterTargets="Publish">
-        <Exec Command="powershell -File $(ProjectDir)pack.ps1" Condition="Exists('$(ProjectDir)pack.ps1')" />
-        <Exec Command="powershell -File $(ProjectDir)deploy.ps1" Condition="Exists('$(ProjectDir)deploy.ps1')" />
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="del &quot;$(SolutionDir)Packages\Tetr4labRazor.*.nupkg&quot;" />
+        <Exec Command="dotnet pack -p:PackageVersion=$([System.DateTime]::Now.ToString(&quot;yyyy.MM.dd.HHmmss&quot;)) --no-build --output &quot;$(SolutionDir)Packages&quot;" />
     </Target>
 
     <ItemGroup>

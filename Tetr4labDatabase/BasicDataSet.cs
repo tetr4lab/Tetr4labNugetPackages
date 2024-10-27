@@ -6,7 +6,7 @@ using PetaPoco;
 namespace Tetr4lab;
 
 /// <summary>基礎的なデータセット</summary>
-public class BasicDataSet {
+public abstract class BasicDataSet {
 
     /// <summary>待機間隔</summary>
     public virtual int WaitInterval => 1000 / 60;
@@ -86,7 +86,11 @@ public class BasicDataSet {
     /// <summary>指定クラスのモデルインスタンスを取得</summary>
     /// <typeparam name="T">取得するモデルクラス</typeparam>
     /// <returns>取得したモデルインスタンス</returns>
-    public virtual List<T> GetAll<T> () where T : class => new ();
+    public virtual List<T> GetList<T> () where T : class
+        => ListSet.ContainsKey (typeof (T)) && ListSet [typeof (T)] is List<T> list ? list : new ();
+
+    /// <summary>ロード済みモデルインスタンス</summary>
+    public virtual Dictionary<Type, object> ListSet { get; protected set; } = new ();
 
     /// <summary>SQLで使用するテーブル名またはカラム名を得る</summary>
     /// <param name="name">プロパティ名</param>
@@ -226,9 +230,8 @@ public class BasicDataSet {
         => await database.ProcessAndCommitAsync (process);
 
     /// <summary>一覧セットをアトミックに取得</summary>
-    /// <returns></returns>
-    public virtual async Task<Result<bool>> GetListSetAsync ()
-        => await Task.FromResult<Result<bool>> (new (Status.Success, true));
+    /// <returns>成否</returns>
+    public abstract Task<Result<bool>> GetListSetAsync ();
 
     /// <summary>単一アイテムを取得 (Idで特定) 【注意】総リストとは別オブジェクトになる</summary>
     /// <typeparam name="T"></typeparam>
@@ -289,7 +292,7 @@ public class BasicDataSet {
             item.Id = default;
         } else {
             // ロード済みに追加
-            GetAll<T> ().Add (item);
+            GetList<T> ().Add (item);
         }
         return new (result.Status, item);
     }
@@ -318,7 +321,7 @@ public class BasicDataSet {
             result.Status = Status.MissingEntry;
         }
         // ロード済みから除去
-        GetAll<T> ().Remove (item);
+        GetList<T> ().Remove (item);
         return result;
     }
 
@@ -390,7 +393,7 @@ public class BasicDataSet {
         });
         if (result.IsSuccess) {
             // ロード済みに追加 (リロード推奨)
-            GetAll<T> ().AddRange (items);
+            GetList<T> ().AddRange (items);
         }
         return result;
     }

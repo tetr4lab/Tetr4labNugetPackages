@@ -35,12 +35,12 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     public virtual BasicDataSet DataSet { get; set; } = default!;
 
     /// <summary>母集合</summary>
-    public virtual List<T> Table => DataSet.GetAll<T> ();
+    public virtual List<T> Table => DataSet.GetList<T> ();
 
     /// <summary>母集合の初期化</summary>
     /// <param name="set"></param>
     public static void InitTable (BasicDataSet set) {
-        var table = set.GetAll<T> ();
+        var table = set.GetList<T> ();
         foreach (var item in table) {
             item.DataSet = set;
         }

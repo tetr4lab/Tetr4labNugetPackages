@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Tetr4lab;
 
 /// <summary>モデルに必要な静的プロパティ</summary>
-public interface IBaseModel<T> {
+public interface IBaseModel {
     /// <summary>テーブル名</summary>
     public static abstract string TableLabel { get; }
     /// <summary>列の名前</summary>

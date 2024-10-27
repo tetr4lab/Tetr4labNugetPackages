@@ -26,7 +26,7 @@ public class MySqlDatabase : Database {
     }
 }
 
-/// <summary>PetaPoco.Databaseのラッパーの拡張</summary>
+/// <summary>PetaPoco.Databaseの拡張</summary>
 public static class DatabaseHelper {
     /// <summary>処理を実行しコミットする、例外またはエラーがあればロールバックする</summary>
     /// <typeparam name="T">返す値の型</typeparam>

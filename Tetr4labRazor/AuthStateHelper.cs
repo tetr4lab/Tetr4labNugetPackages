@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace Tetr4lab;
 
 /// <summary>AuthenticationState拡張</summary>
-public static class AuthStateHelper {
+public static partial class AuthStateHelper {
 
     /// <summary>認証されたユーザがポリシーに適合するか(認可)</summary>
     /// <param name="service">認可サービス

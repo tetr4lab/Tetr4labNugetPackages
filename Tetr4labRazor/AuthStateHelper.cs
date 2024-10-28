@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Tetr4lab;
@@ -8,24 +9,30 @@ namespace Tetr4lab;
 /// <summary>AuthenticationState拡張</summary>
 public static class AuthStateHelper {
 
+    /// <summary>認証されたユーザがポリシーに適合するか(認可)</summary>
+    /// <param name="service">認可サービス
+    /// [Inject] protected IAuthorizationService AuthorizationService { get; set; } = null!;
+    /// </param>
+    /// <param name="id">ユーザ
+    /// protected AuthedIdentity? Identity => (await AuthState).GetIdentity ();
+    /// protected ClaimsPrincipal User => Identity?.User;
+    /// </param>
+    /// <param name="policy">適合を検証するポリシー</param>
+    /// <returns>適合の真偽</returns>
+    public static async Task<bool> IsAuthorizedAsync (this IAuthorizationService service, AuthedIdentity? id, string policy)
+        => id?.User is not null && (await service.AuthorizeAsync (id.User, policy)).Succeeded;
+
     /// <summary>認証状態からIDを得る</summary>
-    /// <param name="state">AuthenticationState</param>
-    /// <returns>Identity</returns>
-    public static AuthedIdentity? GetIdentity (this AuthenticationState state) {
-        var user = state.User;
-        var name = user.Identity?.Name;
-        if (string.IsNullOrEmpty (name)) { return null; }
-        if (user.Identity is ClaimsIdentity claimsIdentity) {
-            foreach (var claim in claimsIdentity.Claims) {
-                if (claim.Type.EndsWith ("emailaddress")) {
-                    var emailAddress = claim.Value;
-                    if (string.IsNullOrEmpty (emailAddress)) { return null; }
-                    return new (user, name, emailAddress);
-                }
-            }
-        }
-        return null;
-    }
+    /// <param name="stateAsync">認証状態</param>
+    /// <returns>ClaimsPrincipalを含むIdentity</returns>
+    public static async Task<AuthedIdentity?> GetIdentityAsync (this Task<AuthenticationState> stateAsync)
+        => new ((await stateAsync).User);
+
+    /// <summary>認証状態からIDを得る</summary>
+    /// <param name="state">認証状態</param>
+    /// <returns>ClaimsPrincipalを含むIdentity</returns>
+    public static AuthedIdentity? GetIdentity (this AuthenticationState state) => new (state.User);
+
 }
 
 /// <summary>ID</summary>
@@ -33,18 +40,23 @@ public class AuthedIdentity {
     /// <summary>ユーザ</summary>
     public ClaimsPrincipal User { get; init; }
     /// <summary>名前</summary>
-    public string Name { get; init; }
+    public string? Name { get; init; }
     /// <summary>メールアドレス</summary>
-    public string EmailAddress { get; init; }
+    public string? EmailAddress { get; init; }
     /// <summary>コンストラクタ</summary>
     /// <param name="user">ユーザ</param>
-    /// <param name="name">名前</param>
-    /// <param name="emailAddress">メールアドレス</param>
-    public AuthedIdentity (ClaimsPrincipal user, string name, string emailAddress) {
-        if (string.IsNullOrEmpty (name)) { throw new ArgumentException ("name", "null or empty"); }
-        if (string.IsNullOrEmpty (emailAddress)) { throw new ArgumentException ("emailAddress", "null or empty"); }
+    public AuthedIdentity (ClaimsPrincipal user) {
         User = user;
-        Name = name;
-        EmailAddress = emailAddress;
+        Name = user.Identity?.Name;
+        if (user.Identity is ClaimsIdentity claimsIdentity) {
+            foreach (var claim in claimsIdentity.Claims) {
+                if (claim.Type.EndsWith ("emailaddress")) {
+                    EmailAddress = claim.Value;
+                    break;
+                }
+            }
+        }
     }
+    /// <summary>識別子</summary>
+    public string? Identifier => EmailAddress ?? Name;
 }

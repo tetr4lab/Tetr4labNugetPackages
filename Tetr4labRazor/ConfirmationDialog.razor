@@ -1,0 +1,47 @@
+﻿@*汎用のYes/Noダイアログ*@
+@using MudBlazor
+
+@namespace Tetr4lab
+
+<MudDialog>
+    <DialogContent>
+        @foreach (var content in Contents) {
+            @if (content != null) {
+                <MudText>@content</MudText>
+            }
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (CancellationLabel != "") {
+            <MudButton OnClick="Cancel" Color="CancellationColor" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Large">@CancellationLabel</MudButton>
+        }
+        @if (AcceptionLabel != "") {
+            <MudButton OnClick="Accept" Color="AcceptionColor" StartIcon="@AcceptionIcon" Size="Size.Large">@AcceptionLabel</MudButton>
+        }
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+    /// <summary>MudBlazorniに渡される自身のインスタンス(MudDialogInstance)</summary>
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = new MudDialogInstance ();
+    /// <summary>ダイアログ本文</summary>
+    [Parameter] public IEnumerable<string> Contents { get; set; } = new string [] { };
+    /// <summary>OKボタンのラベル</summary>
+    [Parameter] public string AcceptionLabel { get; set; } = "OK";
+    /// <summary>OKボタンの色</summary>
+    [Parameter] public Color AcceptionColor { get; set; } = Color.Success;
+    /// <summary>OKボタンのアイコン</summary>
+    [Parameter] public string? AcceptionIcon { get; set; } = Icons.Material.Filled.Check;
+    /// <summary>Cancelボタンのラベル</summary>
+    [Parameter] public string CancellationLabel { get; set; } = "Cancel";
+    /// <summary>Cancelボタンの色</summary>
+    [Parameter] public Color CancellationColor { get; set; } = Color.Default;
+
+    /// <summary>取り消し</summary>
+    protected void Cancel() => MudDialog.Cancel();
+
+    /// <summary>承認</summary>
+    protected void Accept () => MudDialog.Close (DialogResult.Ok (true));
+
+}

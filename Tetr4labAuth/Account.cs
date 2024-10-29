@@ -76,25 +76,24 @@ group by users.email
     [Column ("policies")] public string Policies { get; set; } = "";
 }
 
-/// <summary>ウェブアプリビルダー拡張</summary>
-public static partial class WebApplicationBuilderHelper {
+/// <summary>DIサービスコレクション拡張</summary>
+public static partial class IServiceCollectionHelper {
     /// <summary>クッキーとグーグルの認証を構成</summary>
-    /// <param name="builder">ビルダー</param>
-    public static void AddAuthentication (this WebApplicationBuilder builder) {
-        builder.Services.AddAuthentication (options => {
+    /// <param name="services">DIサービスコレクション</param>
+    /// <param name="crlientId">Google OAuth2 クライアントID</param>
+    /// <param name="clientSecret">Google OAuth2 クライアントシークレット</param>
+    public static void AddAuthentication (this IServiceCollection services, string crlientId, string clientSecret) {
+        services.AddAuthentication (options => {
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
         })
             .AddCookie ()
             .AddGoogle (options => {
-                options.ClientId = builder.Configuration ["Authentication:Google:ClientId"]!;
-                options.ClientSecret = builder.Configuration ["Authentication:Google:ClientSecret"]!;
+                options.ClientId = crlientId;
+                options.ClientSecret = clientSecret;
             });
     }
-}
 
-/// <summary>DIサービスコレクション拡張</summary>
-public static partial class IServiceCollectionHelper {
     /// <summary>メールアドレスを保持するクレームを要求する認可用のポリシーを構成 (Accountクラスに依存)</summary>
     /// <param name="services">DIサービスコレクション</param>
     /// <param name="connectionString">接続文字列</param>

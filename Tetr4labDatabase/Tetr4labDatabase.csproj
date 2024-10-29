@@ -15,7 +15,7 @@
     <Description>a private library for PetaPoco / MySQL</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.22</Version>
+    <Version>1.0.26</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.10" />
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
     <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
   </ItemGroup>

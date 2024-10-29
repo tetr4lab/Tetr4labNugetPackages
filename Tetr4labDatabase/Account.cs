@@ -1,4 +1,7 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using PetaPoco;
 
@@ -71,6 +74,23 @@ group by users.email
     [Column ("common_name")] public string CommonName { get; set; } = "";
     /// <summary>ポリシー</summary>
     [Column ("policies")] public string Policies { get; set; } = "";
+}
+
+/// <summary>ウェブアプリビルダー拡張</summary>
+public static partial class WebApplicationBuilderHelper {
+    /// <summary>クッキーとグーグルの認証を構成</summary>
+    /// <param name="builder">ビルダー</param>
+    public static void AddAuthentication (this WebApplicationBuilder builder) {
+        builder.Services.AddAuthentication (options => {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+            .AddCookie ()
+            .AddGoogle (options => {
+                options.ClientId = builder.Configuration ["Authentication:Google:ClientId"]!;
+                options.ClientSecret = builder.Configuration ["Authentication:Google:ClientSecret"]!;
+            });
+    }
 }
 
 /// <summary>DIサービスコレクション拡張</summary>

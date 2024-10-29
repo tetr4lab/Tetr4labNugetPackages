@@ -15,13 +15,14 @@
     <Description>a private library for PetaPoco / MySQL</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.27</Version>
+    <Version>1.0.28</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
     <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
+    <PackageReference Include="Tetr4lab" Version="1.0.4" />
   </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -40,8 +41,4 @@
       </None>
     </ItemGroup>
     
-    <ItemGroup>
-      <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
-    </ItemGroup>
-
 </Project>

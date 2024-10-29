@@ -30,6 +30,8 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     [Column ("modified"), VirtualColumn] public DateTime Modified { get; set; }
     /// <summary>更新者</summary>
     [Column ("modifier")] public string Modifier { get; set; } = "";
+    /// <summary>備考</summary>
+    [Column ("remarks")] public string? Remarks { get; set; }
 
     /// <summary>母集合</summary>
     public virtual BasicDataSet DataSet { get; set; } = default!;
@@ -59,6 +61,7 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
             Creator = Creator,
             Modified = Modified,
             Modifier = Modifier,
+            Remarks = Remarks,
         };
 
     /// <summary>値のコピー</summary>
@@ -71,6 +74,7 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
         destination.Creator = Creator;
         destination.Modified = Modified;
         destination.Modifier = Modifier;
+        destination.Remarks = Remarks;
         return destination;
     }
 
@@ -86,5 +90,5 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
 
     /// <summary>ハッシュコードの取得</summary>
     /// <returns></returns>
-    public abstract override int GetHashCode ();
+    public override int GetHashCode () => HashCode.Combine (Id, Version, Created, Creator, Modified, Modifier, Remarks);
 }

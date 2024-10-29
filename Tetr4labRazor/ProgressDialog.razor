@@ -1,0 +1,28 @@
+﻿@using MudBlazor
+
+@namespace Tetr4lab
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6">@Title</MudText>
+        @if (!string.IsNullOrEmpty (Content)) {
+            <MudText>@Content</MudText>
+        }
+        <MudPaper Elevation="0" Class="mt-4">
+            @{var isFirst = true;}
+            @foreach (var message in ProgressMessages) {
+                @if (message != null) {
+                    <MudText Style="@(ProgressValue == 101 && isFirst ? "font-weight:bold;" : "")">@message</MudText>
+                    isFirst = false;
+                }
+            }
+            <MudProgressLinear Color="@Color" Size="@Size.Large" Indeterminate="@(Indeterminate && ProgressValue >= 0 && ProgressValue  <= 100 )" Value="@ProgressValue" />
+        </MudPaper>
+    </DialogContent>
+    <DialogActions>
+        @if (CancellationLabel != "") {
+            <MudButton Disabled="@(cancelRequest || ProgressValue < 0 || ProgressValue > 100)" OnClick="OnPushCancelButton" Color="CancellationColor" StartIcon="@CancellationIcon" Size="Size.Large">@CancellationLabel</MudButton>
+        }
+        <MudButton Disabled="@(ProgressValue >= 0 && ProgressValue <= 100)" OnClick="@Accept" Color="@AcceptionColor" StartIcon="@AcceptionIcon" Size="@Size.Large">@AcceptionLabel</MudButton>
+    </DialogActions>
+</MudDialog>

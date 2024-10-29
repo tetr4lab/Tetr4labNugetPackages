@@ -13,7 +13,7 @@
     </DialogContent>
     <DialogActions>
         @if (CancellationLabel != "") {
-            <MudButton OnClick="Cancel" Color="CancellationColor" StartIcon="@Icons.Material.Filled.Cancel" Size="Size.Large">@CancellationLabel</MudButton>
+            <MudButton OnClick="Cancel" Color="CancellationColor" StartIcon="@CancellationIcon" Size="Size.Large">@CancellationLabel</MudButton>
         }
         @if (AcceptionLabel != "") {
             <MudButton OnClick="Accept" Color="AcceptionColor" StartIcon="@AcceptionIcon" Size="Size.Large">@AcceptionLabel</MudButton>

@@ -1,4 +1,7 @@
-﻿namespace Tetr4lab {
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Tetr4lab {
 
     /// <summary>タスク拡張</summary>
     public static class TaskEx {

@@ -33,6 +33,9 @@
         <Pack>True</Pack>
         <PackagePath>\</PackagePath>
       </None>
+      <None Remove="**\package.json" />
+      <None Remove="**\*.asmdef" />
+      <None Remove="**\*.meta" />
     </ItemGroup>
 
 </Project>

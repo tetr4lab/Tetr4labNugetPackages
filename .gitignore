@@ -66,6 +66,7 @@ StyleCopReport.xml
 *_i.h
 *.ilk
 *.meta
+!/Tetr4lab/**/*.meta
 *.obj
 *.iobj
 *.pch

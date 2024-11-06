@@ -54,10 +54,12 @@ namespace Tetr4lab {
             if (resName != null) {
                 using (var stream = asm.GetManifestResourceStream (resName)) {
                     if (stream != null) {
-                        var lines = (new StreamReader (stream)).ReadToEnd ().Replace ("\r\n", "\n").Split (['\r', '\n']);
-                        if (lines.Length > 1) {
-                            _branch = lines [0].Trim ();
-                            _id = lines [1].Trim ();
+                        using (var reader = new StreamReader (stream)) {
+                            var lines = reader.ReadToEnd ().Replace ("\r\n", "\n").Split (['\r', '\n']);
+                            if (lines.Length > 1) {
+                                _branch = lines [0].Trim ();
+                                _id = lines [1].Trim ();
+                            }
                         }
                     }
                 }

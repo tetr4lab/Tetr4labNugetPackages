@@ -1,5 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace Tetr4lab {
 
@@ -49,7 +50,7 @@ namespace Tetr4lab {
         /// <param name="asm">アセンブリ</param>
         private static void Initialize (Assembly? asm) {
             if (asm is null) { return; }
-            var resName = asm.GetManifestResourceNames ().ToList ().Find (n => n.EndsWith (ResourceName));
+            var resName = Array.Find (asm.GetManifestResourceNames (), n => n.EndsWith (ResourceName));
             if (resName != null) {
                 using (var stream = asm.GetManifestResourceStream (resName)) {
                     if (stream != null) {

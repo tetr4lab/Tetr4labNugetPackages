@@ -63,7 +63,13 @@ namespace Tetr4lab {
         /// <typeparam name="T">型</typeparam>
         /// <param name="collection"></param>
         /// <returns>nullまたは空であれば真</returns>
-        public static bool IsNullOrEmpty<T> (this IEnumerable<T> collection) => (collection == null || collection.Count () == 0);
+        public static bool IsNullOrEmpty<T> (this IEnumerable<T> collection) {
+            if (collection is null) { return true; }
+            foreach (var item in collection) {
+                return false;
+            }
+            return true;
+        }
 
     }
 }

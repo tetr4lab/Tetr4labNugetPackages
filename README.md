@@ -1,3 +1,15 @@
-﻿tetr4lab. private libraries
+﻿## tetr4lab. private libraries for Blazor
 
-7552e8b7a338c90245d18ced4980ac05ba90240c で、バージョンがリセットされました。
+```csharp
+using Tetr4lab;
+```
+
+### NuGet Packages for Blazor
+```
+https://github.com/tetr4lab/Tetr4labNugetPackages.git?path=/Packages
+```
+
+### C# Additions for Unity Package Manager
+```
+https://github.com/tetr4lab/Tetr4labNugetPackages.git?path=/Tetr4lab
+```

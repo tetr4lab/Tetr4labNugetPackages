@@ -52,13 +52,11 @@ namespace Tetr4lab {
         /// <returns></returns>
         public static string Join<T> (this IEnumerable<T> collection, string separator) {
             if (collection is null) { return string.Empty; }
-            var count = collection.Count ();
-            var array = new string [count];
-            var index = 0;
+            var list = new List<string> ();
             foreach (var item in collection) {
-                array [index++] = item?.ToString () ?? string.Empty;
+                list.Add (item?.ToString () ?? string.Empty);
             }
-            return string.Join (separator, array);
+            return string.Join (separator, list);
         }
 
         /// <summary>コレクションがnullまたは空であれば真</summary>

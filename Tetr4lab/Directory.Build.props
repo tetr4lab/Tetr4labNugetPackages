@@ -1,5 +1,7 @@
 ﻿<Project>
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+    <!-- ArtifactsPath: https://learn.microsoft.com/ja-jp/dotnet/core/sdk/artifacts-output -->
+    <!-- MSBuildThisFileDirectory: https://learn.microsoft.com/ja-jp/visualstudio/msbuild/msbuild-reserved-and-well-known-properties -->
   <PropertyGroup>
       <ArtifactsPath>$(MSBuildThisFileDirectory).artifacts</ArtifactsPath>
   </PropertyGroup>

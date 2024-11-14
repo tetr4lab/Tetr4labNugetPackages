@@ -18,14 +18,8 @@ public static class ProtectedLocalStrageHelper {
     /// <param name="storage">ストレージ</param>
     /// <param name="key">キー</param>
     /// <returns>値</returns>
-    public static async Task<ProtectedBrowserStorageResult<T>> GetValueAsync<T> (this ProtectedLocalStorage storage, string key) where T : notnull {
-        try {
-            return await storage.GetAsync<T> ($"{AppId}|{key}");
-        }
-        catch (Exception ex) {
-            return new ();
-        }
-    }
+    public static async Task<ProtectedBrowserStorageResult<T>> GetValueAsync<T> (this ProtectedLocalStorage storage, string key) where T : notnull
+        => await storage.GetAsync<T> ($"{AppId}|{key}");
     /// <summary>ストレージへ値を保存</summary>
     /// <typeparam name="T">値の型</typeparam>
     /// <param name="storage">ストレージ</param>

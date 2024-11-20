@@ -8,6 +8,47 @@ using Tetr4lab;
 ```
 https://github.com/tetr4lab/Tetr4labNugetPackages.git?path=/Packages
 ```
+#### Assemblies and Clases
+##### Tetr4lab
+TaskEx,
+RevisionInfo,
+ParameterHelper,
+HttpClientHelper,
+CollectionHelper,
+StringHelper,
+
+##### Tetr4labAuth
+Account,
+AuthStateHelper,
+AuthedIdentity,
+IServiceCollectionHelper,
+
+##### Tetr4labDatabase
+IBaseModel,
+BaseModel<T>,
+BasicDataSet,
+MyDataSetException,
+ExceptionToErrorHelper,
+MySqlDatabase,
+DatabaseHelper,
+enum Status,
+Result<T>,
+StatusHelper,
+VirtualColumnAttribute,
+
+##### Tetr4labRazor
+ConfirmationDialog,
+MudDialogServiceHelper,
+JSRuntimeHelper,
+NavigationManagerHelper,
+ProgressDialog,
+ProgressDialogHelper,
+ProtectedLocalStrageHelper,
+SessionCounter,
+
+##### Tetr4labWasm
+CookieHandler,
+IServiceCollectionHelper,
 
 ### C# Additions for Unity Package Manager
 ```

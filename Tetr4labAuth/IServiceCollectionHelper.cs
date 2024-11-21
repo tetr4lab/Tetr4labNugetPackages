@@ -70,24 +70,4 @@ public static partial class IServiceCollectionHelper {
             }
         });
     }
-
-    /// <summary>限定クロスオリジンを許容する名前付きCORS設定を構成</summary>
-    /// <param name="services">DIサービスコレクション</param>
-    /// <param name="name">名前</param>
-    /// <param name="origin">ホスト</param>
-    /// <example>
-    /// // 名前付きCORS設定
-    /// bulder.Services.AddCors ("AllowSpecificOrigin", builder.Configuration ["Authentication:Jwt:Host"]!);
-    /// // ポリシー名を指定してCORS設定を有効化
-    /// app.UseCors("AllowSpecificOrigin");
-    /// </example>
-    public static void AddCors (this IServiceCollection services, string name, string origin) {
-        services.AddCors (options => {
-            options.AddPolicy (name, policy =>
-                policy.WithOrigins (origin)
-                      .AllowAnyHeader ()
-                      .AllowAnyMethod ()
-                      .AllowCredentials ());
-        });
-    }
 }

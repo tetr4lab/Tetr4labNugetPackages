@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labAuth", "Tetr4labAut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labWasm", "Tetr4labWasm\Tetr4labWasm.csproj", "{B04D5053-F233-4B43-BD93-93F963D8C99F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labServer", "Tetr4labServer\Tetr4labServer.csproj", "{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B04D5053-F233-4B43-BD93-93F963D8C99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B04D5053-F233-4B43-BD93-93F963D8C99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B04D5053-F233-4B43-BD93-93F963D8C99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

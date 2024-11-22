@@ -43,8 +43,10 @@ JSRuntimeHelper,
 NavigationManagerHelper,
 ProgressDialog,
 ProgressDialogHelper,
-ProtectedLocalStrageHelper,
 SessionCounter,
+
+##### Tetr4labServer
+ProtectedLocalStrageHelper,
 
 ##### Tetr4labWasm
 CookieHandler,

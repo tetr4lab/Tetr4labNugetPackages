@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace Tetr4labRazor;
+namespace Tetr4lab;
 
 /// <summary>
 /// ストレージの拡張

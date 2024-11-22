@@ -10,13 +10,13 @@
     <PackageProjectUrl>https://tetr4lab.nyanta.jp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Title>tetr4lab razor</Title>
+    <Title>tetr4lab server</Title>
     <Authors>$(AssemblyName).</Authors>
     <Company>$(Authors).</Company>
     <Description>a private library for blazor</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 

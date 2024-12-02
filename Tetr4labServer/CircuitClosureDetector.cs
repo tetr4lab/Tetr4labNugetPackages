@@ -16,7 +16,7 @@ namespace Tetr4lab;
 ///   @code{
 ///     protected override async Task OnAfterRenderAsync (bool firstRender) {
 ///       await base.OnAfterRenderAsync (firstRender);
-///   	  if (firstRender && CircuitHandler is CircuitClosureDetector handler) {
+///   	  if (firstRender &amp;&amp; CircuitHandler is CircuitClosureDetector handler) {
 ///   	    handler.Disconnected += circuitId => {
 ///   	      System.Diagnostics.Debug.WriteLine ($"Page Closed {circuitId}");
 ///   	    };

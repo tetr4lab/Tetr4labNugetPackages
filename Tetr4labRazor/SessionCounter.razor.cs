@@ -2,24 +2,27 @@
 
 namespace Tetr4lab;
 
-/// <summary>セッションカウンタ</summary>
+/// <summary>セッションカウンタを表示するコンポーネントとセッション数の更新通知サービス</summary>
+/// <remark>
+/// 起動: 回路の閉鎖を検出するCircuitHandlerをセッション毎に使う
+/// ※`CircuitClosureDetector`のアセンブリは`Tetr4labServer`
+/// <example>
+/// builder.Services.AddScoped&lt;CircuitHandler, CircuitClosureDetector&gt; ();
+/// </example>
+/// セッションカウンタ: ページにコンポーネントを配置する
+/// <example>&lt;SessionCounter /&gt;</example>
+/// 更新通知: 初期化でSubscribeに自身と更新処理を渡す、切断時にUnsubscribeを呼ぶ
+/// <example>
+/// [Inject] protected CircuitHandler CircuitHandler { get; set; } = null!;
+/// override void OnInitialized () {
+///     SessionCounter.Subscribe (this, () => InvokeAsync (StateHasChanged));
+///     if (CircuitHandler is CircuitClosureDetector handler) {
+///         handler.Disconnected += id => SessionCounter.Unsubscribe (this);
+///     }
+/// }
+/// </example>
+/// </remark>
 public partial class SessionCounter : ComponentBase, IDisposable {
-    /**
-    * <summary>セッションカウンタを表示するコンポーネントとセッション数の更新通知サービス</summary>
-    * <remark>
-    * セッションカウンタ: ページにコンポーネントを配置する
-    * <example>&lt;SessionCounter /&gt;</example>
-    * 更新通知: 初期化でSubscribeに自身と更新処理を渡す、ページでIDisposableを実装しUnsubscribeを呼ぶ
-    * <example>
-    * override void OnInitialized () {
-    *     SessionCounter.Subscribe (this, () => InvokeAsync (StateHasChanged));
-    * }
-    * void Dispose () {
-    *     SessionCounter.Unsubscribe (this);
-    * }
-    * </example>
-    * </remark>
-    **/
 
     /// <summary>インスタンス数</summary>
     public static int Count => _instances.Count;

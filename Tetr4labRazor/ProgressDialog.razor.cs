@@ -16,7 +16,7 @@ public partial class ProgressDialog {
     public const int Cancel = -1;
 
     /// <summary>MudBlazorniに渡される自身のインスタンス(MudDialogInstance)</summary>
-    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = new MudDialogInstance ();
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     /// <summary>タイトル</summary>
     [Parameter] public string Title { get; set; } = "";
     /// <summary>ダイアログ本文</summary>

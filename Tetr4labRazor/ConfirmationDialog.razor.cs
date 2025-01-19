@@ -7,7 +7,7 @@ namespace Tetr4lab;
 /// <remarks>MudMessageBoxの再発明</remarks>
 public partial class ConfirmationDialog : ComponentBase {
     /// <summary>MudBlazorniに渡される自身のインスタンス(MudDialogInstance)</summary>
-    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = new MudDialogInstance ();
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     /// <summary>ダイアログ本文</summary>
     [Parameter] public IEnumerable<string> Contents { get; set; } = new string [] { };
     /// <summary>OKボタンのラベル</summary>

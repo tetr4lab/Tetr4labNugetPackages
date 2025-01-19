@@ -15,12 +15,12 @@
     <Description>a private library for PetaPoco / MySQL</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.27</Version>
+    <Version>1.0.28</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="2.3.7" />
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
     <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
   </ItemGroup>
 

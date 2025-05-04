@@ -55,7 +55,6 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
 
 # StyleCop
 StyleCopReport.xml
@@ -338,9 +337,6 @@ ASALocalRun/
 *.db
 *.db-shm
 *.db-wal
-
-# Don't ignore server launchSettings.json. We need a specific port number for auth to work.
-!**/BlazingPizza.Server/Properties/launchSettings.json
 
 # Visual Studio Code folder
 .vscode/

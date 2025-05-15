@@ -118,7 +118,7 @@ public abstract class BasicDataSet {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
                 return @virtual == null && attribute != null && (withId || (attribute.Name ?? property.Name) != "Id")
-                    ? $"{attribute.Name ?? property.Name}=@{property.Name}"
+                    ? $"`{attribute.Name ?? property.Name}`=@{property.Name}"
                     : "";
             }).ToList ().FindAll (i => i != ""));
         }
@@ -159,7 +159,7 @@ public abstract class BasicDataSet {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
                 return @virtual == null && attribute != null && (withId || (attribute.Name ?? property.Name) != "Id")
-                    ? attribute.Name ?? property.Name
+                    ? $"`{attribute.Name ?? property.Name}`"
                     : "";
             }).ToList ().FindAll (i => i != ""));
         }
@@ -240,7 +240,7 @@ public abstract class BasicDataSet {
     public virtual async Task<Result<T?>> GetItemByIdAsync<T> (T item) where T : BaseModel<T>, new() {
         var table = GetSqlName<T> ();
         return await ProcessAndCommitAsync (async () => (await database.FetchAsync<T?> (
-            $"select {table}.* from {table} where {table}.Id = @Id;",
+            $"select `{table}`.* from `{table}` where `{table}`.Id = @Id;",
             item
         )).Single ());
     }
@@ -252,7 +252,7 @@ public abstract class BasicDataSet {
     protected virtual async Task<int> UpdateItemAsync<T> (T item) where T : BaseModel<T>, new() {
         var table = GetSqlName<T> ();
         return await database.ExecuteAsync (
-            @$"update {table} set {GetSettingSql<T> ()} where {table}.Id = @Id",
+            @$"update `{table}` set {GetSettingSql<T> ()} where `{table}`.Id = @Id",
             item
         );
     }
@@ -279,7 +279,7 @@ public abstract class BasicDataSet {
     public virtual async Task<Result<T>> AddAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
             item.Id = await database.ExecuteScalarAsync<int> (
-                @$"insert into {GetSqlName<T> ()} ({GetColumnsSql<T> ()}) values ({GetValuesSql<T> ()});
+                @$"insert into `{GetSqlName<T> ()}` ({GetColumnsSql<T> ()}) values ({GetValuesSql<T> ()});
                 select LAST_INSERT_ID();",
                 item
             );
@@ -308,7 +308,7 @@ public abstract class BasicDataSet {
             if (original.IsSuccess && original.Value != null) {
                 if (item.Version == original.Value.Version) {
                     return await database.ExecuteAsync (
-                        $"delete from {GetSqlName<T> ()} where Id = @Id",
+                        $"delete from `{GetSqlName<T> ()}` where `Id` = @Id",
                         item
                     );
                 } else {
@@ -386,7 +386,7 @@ public abstract class BasicDataSet {
                 valuesSqls.Add ($"({GetValuesSql<T> (i)})");
             }
             var result = await database.ExecuteAsync (
-                $"insert into {GetSqlName<T> ()} ({GetColumnsSql<T> ()}) values {string.Join (',', valuesSqls)};",
+                $"insert into `{GetSqlName<T> ()}` ({GetColumnsSql<T> ()}) values {string.Join (',', valuesSqls)};",
                 GetParamDictionary (items)
             );
             return result;

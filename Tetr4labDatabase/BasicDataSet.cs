@@ -36,8 +36,9 @@ public abstract class BasicDataSet {
 
     /// <summary>初期化</summary>
     public virtual async Task InitializeAsync () {
-        if (!IsInitialized) {
+        if (!IsInitialized && !IsInitializeStarted) {
             try {
+                IsInitializeStarted = true;
                 await LoadAsync ();
                 IsInitialized = true;
             }
@@ -48,6 +49,9 @@ public abstract class BasicDataSet {
             }
         }
     }
+
+    /// <summary>初期化開始済み</summary>
+    public virtual bool IsInitializeStarted { get; protected set; }
 
     /// <summary>初期化済み</summary>
     public virtual bool IsInitialized { get; protected set; }

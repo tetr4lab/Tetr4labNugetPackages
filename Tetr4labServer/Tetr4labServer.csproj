@@ -25,7 +25,7 @@
   </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="del &quot;$(SolutionDir)Packages\Tetr4labServer.*.nupkg&quot;" />
+        <!--Exec Command="del &quot;$(SolutionDir)Packages\Tetr4labServer.*.nupkg&quot;" /-->
         <Exec Command="dotnet pack --no-build --output &quot;$(SolutionDir)Packages&quot;" />
     </Target>
 

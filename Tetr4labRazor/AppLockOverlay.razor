@@ -1,0 +1,30 @@
+﻿@* 汎用のオーバーレイ兼プログレスサークル *@
+@using MudBlazor
+
+@namespace Tetr4lab
+
+<MudOverlay @bind-Visible="IsOverlayed" DarkBackground="true" ZIndex="9999">
+    @if (OverlayMax <= 0) {
+        <MudStack>
+            <MudProgressCircular Indeterminate Rounded Size="Size.Large" Color="Color.Surface" Class="align-self-center" />
+            @if (!string.IsNullOrEmpty (OverlayLabel)) {
+                <MudText Align="Align.Center">@(OverlayLabel)</MudText>
+            }
+        </MudStack>
+    } else {
+        <MudPaper Width="@($"{(OverlayMax.ToString ()).Length * 2 + 4}em")" Elevation="7" Class="pa-4" Style="background-color: var(--mud-palette-background-gray);">
+            <MudStack>
+                <MudProgressCircular Value="OverlayValue" Min="OverlayMin" Max="OverlayMax" Color="Color.Surface" Rounded Size="Size.Large" Class="align-self-center" />
+                <MudText Align="Align.Center">@(OverlayValue) / @(OverlayMax)</MudText>
+            </MudStack>
+        </MudPaper>
+    }
+</MudOverlay>
+
+@code {
+    [Parameter] public bool IsOverlayed { get; set; } = true;
+    [Parameter] public int OverlayValue { get; set; } = -1;
+    [Parameter] public int OverlayMin { get; set; } = 0;
+    [Parameter] public int OverlayMax { get; set; } = 0;
+    [Parameter] public string? OverlayLabel { get; set; } = null;
+}

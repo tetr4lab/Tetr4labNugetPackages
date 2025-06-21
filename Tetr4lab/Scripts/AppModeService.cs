@@ -32,7 +32,7 @@ public interface IAppModeService<TEnum> where TEnum : Enum {
     ///                 if (true /*or 可否判断*/) {
     ///                     service.SetMode (service.RequestedMode); // モード変更要求を受け付けて実際に変更
     ///                 }
-    ///                 service.SetRequestedMode (AppMode.None);
+    ///                 service.RequestMode (AppMode.None);
     ///             }
     ///         }
     ///     }
@@ -55,7 +55,7 @@ public interface IAppModeService<TEnum> where TEnum : Enum {
     void SetMode (TEnum mode);
     /// <summary>モードを要求</summary>
     /// <remarks>See: <see cref="PropertyChanged"/></remarks>
-    void SetRequestedMode (TEnum mode);
+    void RequestMode (TEnum mode);
 }
 
     /// <summary>アプリモード管理</summary>
@@ -110,7 +110,7 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
 
     /// <summary>モードをリクエスト</summary>
     /// <param name="mode">要求するモード</param>
-    public void SetRequestedMode (TEnum mode) {
+    public void RequestMode (TEnum mode) {
         RequestedMode = mode;
     }
 }

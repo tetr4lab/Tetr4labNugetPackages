@@ -77,7 +77,7 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
     }
 
     /// <summary>アプリのモード</summary>
-    public TEnum CurrentMode {
+    public virtual TEnum CurrentMode {
         get => _currentMode;
         protected set {
             if (!_currentMode.Equals (value)) {
@@ -90,7 +90,7 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
     protected TEnum _currentMode = (TEnum) (object) DefaultMode;
 
     /// <summary>リクエストされたアプリモード</summary>
-    public TEnum RequestedMode {
+    public virtual TEnum RequestedMode {
         get => _requestedMode;
         protected set {
             if (!_requestedMode.Equals (value)) {
@@ -104,13 +104,13 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
 
     /// <summary>モードを設定</summary>
     /// <param name="mode">新しいモード</param>
-    public void SetMode (TEnum mode) {
+    public virtual void SetMode (TEnum mode) {
         CurrentMode = mode;
     }
 
     /// <summary>モードをリクエスト</summary>
     /// <param name="mode">要求するモード</param>
-    public void RequestMode (TEnum mode) {
+    public virtual void RequestMode (TEnum mode) {
         RequestedMode = mode;
     }
 }

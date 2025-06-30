@@ -19,13 +19,13 @@ public static class ScrollManagerHelper {
     public static async Task ScrollToIndexAsync (this IScrollManager ScrollManager, IJSRuntime JSRuntime, int index, string itemSelector = "tr.mud-table-row:has(td.mud-table-cell)", string tableSelector = ".mud-table-container", ScrollBehavior behavior = ScrollBehavior.Auto) {
         var lastTableHeight = double.NaN;
         var lastItemHeight = double.NaN;
-        var table = (ElementDimensions?) null;
-        var item = (ElementDimensions?) null;
+        var table = (ElementRect?) null;
+        var item = (ElementRect?) null;
         for (var i = 0; i < NumberOfTrials; i++) {
             lastTableHeight = table?.Height ?? double.NaN;
             lastItemHeight = item?.Height ?? double.NaN;
-            table = await JSRuntime.GetElementDimensions (tableSelector);
-            item = await JSRuntime.GetElementDimensions (itemSelector);
+            table = await JSRuntime.GetElementRect (tableSelector);
+            item = await JSRuntime.GetElementRect (itemSelector);
             if (table is not null && table.Height == lastTableHeight && item is not null && item.Height == lastItemHeight) {
                 break; // レンダリングが落ち着いたら抜ける
             }

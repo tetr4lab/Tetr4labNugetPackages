@@ -15,7 +15,7 @@ async function downloadFileFromStream(fileName, contentStreamReference) {
     URL.revokeObjectURL(url);
 }
 
-function getElementDimensions(selector) {
+function getElementRect(selector) {
     const element = document.querySelector(selector);
     if (element) {
         const rect = element.getBoundingClientRect();

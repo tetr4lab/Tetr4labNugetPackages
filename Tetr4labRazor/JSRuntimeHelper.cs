@@ -3,7 +3,7 @@
 namespace Tetr4lab;
 
 /// <summary>要素の位置とサイズ</summary>
-public class ElementDimensions {
+public class ElementRect {
     /// <summary>横位置</summary>
     public double X { get; init; }
     /// <summary>縦位置</summary>
@@ -70,8 +70,8 @@ public static partial class JSRuntimeHelper {
     /// <param name="JSRuntime"></param>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public static async Task<ElementDimensions?> GetElementDimensions (this IJSRuntime JSRuntime, string selector) {
+    public static async Task<ElementRect?> GetElementRect (this IJSRuntime JSRuntime, string selector) {
         if (string.IsNullOrEmpty (selector)) { return null; }
-        return await JSRuntime.InvokeAsync<ElementDimensions?> ("getElementDimensions", selector);
+        return await JSRuntime.InvokeAsync<ElementRect?> ("getElementRect", selector);
     }
 }

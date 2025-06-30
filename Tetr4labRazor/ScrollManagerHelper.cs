@@ -24,8 +24,7 @@ public static class ScrollManagerHelper {
         for (var i = 0; i < NumberOfTrials; i++) {
             lastTableHeight = table?.Height ?? double.NaN;
             lastItemHeight = item?.Height ?? double.NaN;
-            table = await JSRuntime.GetElementRect (tableSelector);
-            item = await JSRuntime.GetElementRect (itemSelector);
+            (table, item) = await JSRuntime.GetElementRect (tableSelector, itemSelector);
             if (table is not null && table.Height == lastTableHeight && item is not null && item.Height == lastItemHeight) {
                 break; // レンダリングが落ち着いたら抜ける
             }

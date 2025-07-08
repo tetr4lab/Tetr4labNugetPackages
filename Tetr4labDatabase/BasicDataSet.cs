@@ -21,17 +21,19 @@ public abstract class BasicDataSet {
     protected virtual Database database { get; set; }
 
     /// <summary>データベース名</summary>
-    protected string databaseName;
+    protected string databaseName = "";
 
     /// <summary>コンストラクタ</summary>
-    public BasicDataSet (Database database) {
+    public BasicDataSet (Database database, string? key = "database") {
         this.database = database;
-        var words = database.ConnectionString.Split (['=', ';']);
-        var index = Array.IndexOf (words, "database");
-        if (index < 0 || index > words.Length) {
-            throw new InvalidOperationException ("The database name could not be determined.");
+        if (!string.IsNullOrEmpty (key)) {
+            var words = database.ConnectionString.Split (['=', ';']);
+            var index = Array.IndexOf (words, key);
+            if (index < 0 || index > words.Length) {
+                throw new InvalidOperationException ("The database name could not be determined.");
+            }
+            databaseName = words [index + 1];
         }
-        databaseName = words [index + 1];
     }
 
     /// <summary>初期化</summary>
@@ -121,7 +123,7 @@ public abstract class BasicDataSet {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || (attribute.Name ?? property.Name) != "Id")
+                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"`{attribute.Name ?? property.Name}`=@{property.Name}"
                     : "";
             }).ToList ().FindAll (i => i != ""));
@@ -142,7 +144,7 @@ public abstract class BasicDataSet {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || (attribute.Name ?? property.Name) != "Id")
+                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"@{property.Name}{(index >= 0 ? $"_{index}" : "")}"
                     : "";
             }).ToList ().FindAll (i => i != ""));
@@ -162,7 +164,7 @@ public abstract class BasicDataSet {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || (attribute.Name ?? property.Name) != "Id")
+                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"`{attribute.Name ?? property.Name}`"
                     : "";
             }).ToList ().FindAll (i => i != ""));

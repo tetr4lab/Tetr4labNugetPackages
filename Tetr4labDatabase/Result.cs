@@ -43,7 +43,7 @@ public class Result<T> {
     /// <summary>成功なら値、失敗なら例外</summary>
     public T ValueOrThrow => IsSuccess ? Value : throw new NotSupportedException (Status.ToString ());
     /// <summary>逆引き</summary>
-    public Exception Exception => Status.GetException ();
+    public Exception Exception => BasicDataSetException.GetException (Status);
     /// <summary>文字列化</summary>
     public override string ToString () => $"{{{Status}: {Value}}}";
 }

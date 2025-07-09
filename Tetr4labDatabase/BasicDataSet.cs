@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using MySqlConnector;
 using PetaPoco;
 
 namespace Tetr4lab;
@@ -278,17 +277,21 @@ public abstract class BasicDataSet {
         return result;
     }
 
+    /// <summary>最後に挿入した行番号を得るSQL</summary>
+    /// <returns>行番号</returns>
+    protected abstract Task<int> GetLastInsertRowId ();
+
     /// <summary>単一アイテムの追加</summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="item"></param>
     /// <returns></returns>
     public virtual async Task<Result<T>> AddAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
-            item.Id = await database.ExecuteScalarAsync<int> (
-                @$"insert into `{GetSqlName<T> ()}` ({GetColumnsSql<T> ()}) values ({GetValuesSql<T> ()});
-                select LAST_INSERT_ID();",
+            await database.ExecuteAsync (
+                $"insert into `{GetSqlName<T> ()}` ({GetColumnsSql<T> ()}) values ({GetValuesSql<T> ()});",
                 item
             );
+            item.Id = await GetLastInsertRowId ();
             return item.Id > 0 ? 1 : 0;
         });
         if (result.IsSuccess && result.Value <= 0) {
@@ -307,7 +310,7 @@ public abstract class BasicDataSet {
     /// <typeparam name="T"></typeparam>
     /// <param name="item"></param>
     /// <returns></returns>
-    /// <exception cref="MyDataSetException"></exception>
+    /// <exception cref="BasicDataSetException"></exception>
     public virtual async Task<Result<int>> RemoveAsync<T> (T item) where T : BaseModel<T>, new() {
         var result = await ProcessAndCommitAsync (async () => {
             var original = await GetItemByIdAsync<T> (item);
@@ -318,7 +321,7 @@ public abstract class BasicDataSet {
                         item
                     );
                 } else {
-                    throw new MyDataSetException ($"Version mismatch between {item.Version} and {original.Value.Version}");
+                    throw new BasicDataSetException ($"Version mismatch between {item.Version} and {original.Value.Version}");
                 }
             }
             return 0;
@@ -332,45 +335,10 @@ public abstract class BasicDataSet {
     }
 
     /// <summary>テーブルの次の自動更新値を得る</summary>
-    /// <remarks>MySQL/MariaDBに依存</remarks>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="NotSupportedException"></exception>
-    public virtual async Task<long> GetAutoIncremantValueAsync<T> () where T : class {
-        // 開始Idを取得
-        var Id = 0L;
-        try {
-            // 待避と設定 (SQLに勝手に'SELECT'を挿入しない)
-            var enableAutoSelectBackup = database.EnableAutoSelect;
-            database.EnableAutoSelect = false;
-            try {
-                try {
-                    // 設定 (情報テーブルの即時更新を設定)
-                    await database.ExecuteAsync ("set session information_schema_stats_expiry=1;");
-                }
-                catch (MySqlException ex) when (ex.Message.StartsWith ("Unknown system variable")) {
-                    // MariaDBはこの変数をサポートしていない
-                    System.Diagnostics.Debug.WriteLine ($"Server not supported 'information_schema_stats_expiry'\n{ex}");
-                }
-                // 次の自動更新値の取得
-                Id = await database.SingleAsync<long> (
-                    $"select AUTO_INCREMENT from information_schema.tables where TABLE_SCHEMA='{databaseName}' and TABLE_NAME='{GetSqlName<T> ()}';"
-                );
-            }
-            finally {
-                // 設定の復旧
-                database.EnableAutoSelect = enableAutoSelectBackup;
-            }
-        }
-        catch (Exception ex) {
-            System.Diagnostics.Debug.WriteLine ($"Get auto_increment number\n{ex}");
-        }
-        if (Id <= 0) {
-            // 開始Idの取得に失敗
-            throw new NotSupportedException ("Failed to get auto_increment value.");
-        }
-        return Id;
-    }
+    protected abstract Task<long> GetAutoIncremantValueAsync<T> () where T : class;
 
     /// <summary>一括アイテムの追加</summary>
     /// <typeparam name="T"></typeparam>

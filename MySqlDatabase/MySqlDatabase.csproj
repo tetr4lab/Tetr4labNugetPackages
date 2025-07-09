@@ -6,25 +6,26 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Copyright>Copyright© tetr4lab.</Copyright>
-    <PackageProjectUrl>https://tetr4lab.nyanta.jp</PackageProjectUrl>
+    <PackageProjectUrl>https://tetr4lab.org</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Title>tetr4lab database</Title>
+    <Title>MySql database</Title>
     <Authors>$(AssemblyName).</Authors>
     <Company>$(Authors).</Company>
-    <Description>a private library for PetaPoco</Description>
+    <Description>a private library for PetaPoco / MySQL</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.35</Version>
+    <Version>1.0.0</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
   </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <!--Exec Command="del &quot;$(SolutionDir)Packages\Tetr4labDatabase.*.nupkg&quot;" /-->
+        <!--Exec Command="del &quot;$(SolutionDir)Packages\MySqlDatabase.*.nupkg&quot;" /-->
         <Exec Command="dotnet pack --no-build --output &quot;$(SolutionDir)Packages&quot;" />
     </Target>
     
@@ -40,6 +41,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\Tetr4labDatabase\Tetr4labDatabase.csproj" />
       <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
     </ItemGroup>
 

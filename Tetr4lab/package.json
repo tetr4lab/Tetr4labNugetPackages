@@ -5,7 +5,7 @@
     "description": "Tetr4lab",
     "unity": "2021.3",
     "documentationUrl": "https://github.com/tetr4lab/Tetr4labNugetPackages.git?path=/Tetr4lab",
-    "licenses": "MIT",
+    "license": "MIT",
     "dependencies": {},
     "keywords": [
         "Tetr4lab",

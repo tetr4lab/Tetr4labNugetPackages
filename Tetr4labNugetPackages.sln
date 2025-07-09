@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlDatabase", "MySqlDatab
 		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A} = {4A8C9121-78DD-44A7-8D68-34C94ABDF55A}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqliteDatabase", "SqliteDatabase\SqliteDatabase.csproj", "{6C89E280-46B6-4926-AFDE-78D4A804A996}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{361650F2-8F22-4658-BBE5-991171F8EED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{361650F2-8F22-4658-BBE5-991171F8EED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{361650F2-8F22-4658-BBE5-991171F8EED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C89E280-46B6-4926-AFDE-78D4A804A996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C89E280-46B6-4926-AFDE-78D4A804A996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C89E280-46B6-4926-AFDE-78D4A804A996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C89E280-46B6-4926-AFDE-78D4A804A996}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <Copyright>Copyright© tetr4lab.</Copyright>
+        <PackageProjectUrl>https://tetr4lab.org</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Title>SQLite database</Title>
+        <Authors>$(AssemblyName).</Authors>
+        <Company>$(Authors).</Company>
+        <Description>a private library for PetaPoco / SQLite</Description>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <PackageId>$(AssemblyName)</PackageId>
+        <Version>1.0.0</Version>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.18" />
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <!--Exec Command="del &quot;$(SolutionDir)Packages\SqliteDatabase.*.nupkg&quot;" /-->
+        <Exec Command="dotnet pack --no-build --output &quot;$(SolutionDir)Packages&quot;" />
+    </Target>
+
+    <ItemGroup>
+        <None Include="..\LICENSE">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Tetr4labDatabase\Tetr4labDatabase.csproj" />
+        <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
+    </ItemGroup>
+
+</Project>

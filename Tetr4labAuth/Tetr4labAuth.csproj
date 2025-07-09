@@ -47,7 +47,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MySqlDatabase\MySqlDatabase.csproj" />
+        <ProjectReference Include="..\MySqlDatabase\Tetr4labMySqlDatabase.csproj" />
         <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
     </ItemGroup>
 

@@ -18,12 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labWasm", "Tetr4labWas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labServer", "Tetr4labServer\Tetr4labServer.csproj", "{B3A1D6D9-952C-4E58-A2B9-2CC48D24901F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySqlDatabase", "MySqlDatabase\MySqlDatabase.csproj", "{361650F2-8F22-4658-BBE5-991171F8EED9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labMySqlDatabase", "MySqlDatabase\Tetr4labMySqlDatabase.csproj", "{361650F2-8F22-4658-BBE5-991171F8EED9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4A8C9121-78DD-44A7-8D68-34C94ABDF55A} = {4A8C9121-78DD-44A7-8D68-34C94ABDF55A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqliteDatabase", "SqliteDatabase\SqliteDatabase.csproj", "{6C89E280-46B6-4926-AFDE-78D4A804A996}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tetr4labSqliteDatabase", "SqliteDatabase\Tetr4labSqliteDatabase.csproj", "{6C89E280-46B6-4926-AFDE-78D4A804A996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

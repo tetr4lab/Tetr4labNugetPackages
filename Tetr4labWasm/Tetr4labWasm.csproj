@@ -8,7 +8,7 @@
     <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Copyright>Copyright© tetr4lab.</Copyright>
-    <PackageProjectUrl>https://tetr4lab.nyanta.jp</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/tetr4lab/Tetr4labNugetPackages</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Title>tetr4lab wasm</Title>
@@ -17,7 +17,7 @@
     <Description>a private library for blazor</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.1.0</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 

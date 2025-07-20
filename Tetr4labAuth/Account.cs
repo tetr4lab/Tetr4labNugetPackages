@@ -35,13 +35,14 @@ public sealed class Account {
         await TaskEx.DelayUntil (() => connectionString is not null);
         using (var database = (Database) new MySqlDatabase (connectionString!, "MySqlConnector")) {
             var keys = await database.GetListAsync<string> ("select `key` from policies;");
-            var users = await database.GetListAsync<Account> (@"
-select users.email, users.`name`, users.common_name, group_concat(policies.`key`) as policies
-from users
-left join assigns on assigns.users_id = users.id
-left join policies on assigns.policies_id = policies.id
-group by users.email
-;");
+            var users = await database.GetListAsync<Account> ("""
+                select users.email, users.`name`, users.common_name, group_concat(policies.`key`) as policies
+                from users
+                left join assigns on assigns.users_id = users.id
+                left join policies on assigns.policies_id = policies.id
+                group by users.email
+                ;
+                """);
             if (!users.IsSuccess || !keys.IsSuccess) {
                 throw new MyDataSetException ($"Account load failure {{ {(users.IsSuccess ? "" : "users, ")} {(keys.IsSuccess ? "" : "policies, ")}}}");
             }
@@ -68,5 +69,5 @@ group by users.email
     /// <summary>通称</summary>
     [Column ("common_name")] public string CommonName { get; set; } = "";
     /// <summary>ポリシー</summary>
-    [Column ("policies")] public string Policies { get; set; } = "";
+    [Column ("policies"), VirtualColumn] public string Policies { get; set; } = "";
 }

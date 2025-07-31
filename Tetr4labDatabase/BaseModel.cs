@@ -55,6 +55,7 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     /// <returns></returns>
     public virtual T Clone ()
         => new T {
+            DataSet = DataSet,
             Id = Id,
             Version = Version,
             Created = Created,
@@ -68,6 +69,7 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     /// <param name="destination"></param>
     /// <returns></returns>
     public virtual T CopyTo (T destination) {
+        destination.DataSet = DataSet;
         destination.Id = Id;
         destination.Version = Version;
         destination.Created = Created;

@@ -12,6 +12,6 @@ public static class JsonSerializerEx {
     public static TItem? Deserialize<TItem> (string atJson)
         => JsonSerializer.Deserialize<TItem> (
             new Regex (@"@""((?:[^""]|"""")*)""(?!"")", RegexOptions.Singleline)
-            .Replace (atJson, m => $"\"{m.Groups [1].Value.Replace ("\"\"", "\"").Replace ("\\", "\\\\")}\"")
+            .Replace (atJson, m => $"\"{m.Groups [1].Value.Replace ("\\", "\\\\").Replace ("\"\"", "\\\"")}\"")
         );
 }

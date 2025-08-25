@@ -1,4 +1,6 @@
-﻿namespace Tetr4lab {
+﻿using System;
+
+namespace Tetr4lab {
 
     /// <summary>Byte配列拡張</summary>
     public static class ByteArrayHelper {

@@ -44,7 +44,7 @@ public abstract class BasicDataSet {
                 IsInitialized = true;
             }
             catch (Exception e) {
-                System.Diagnostics.Debug.WriteLine (e);
+                System.Diagnostics.Trace.WriteLine (e);
                 isLoading = false;
                 IsUnavailable = true;
             }

@@ -21,7 +21,7 @@ public class SqliteDatabase : Database {
     /// <param name="ex">例外</param>
     /// <returns>真なら昇格</returns>
     public override bool OnException (Exception ex) {
-        System.Diagnostics.Debug.WriteLine ($"Database.OnException: {LastCommand.Ellipsis (80)} {LastArgs}\n{ex}");
+        System.Diagnostics.Trace.WriteLine ($"Database.OnException: {LastCommand.Ellipsis (80)} {LastArgs}\n{ex}");
         return base.OnException (ex);
     }
 }

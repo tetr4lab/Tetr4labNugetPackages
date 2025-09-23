@@ -22,7 +22,7 @@ public abstract class SqliteDataSet : BasicDataSet {
             if (Id == 0) { Id = 1; }
         }
         catch (Exception ex) {
-            System.Diagnostics.Debug.WriteLine ($"Get auto_increment number\n{ex}");
+            System.Diagnostics.Trace.WriteLine ($"Get auto_increment number\n{ex}");
         }
         if (Id <= 0) {
             // 開始Idの取得に失敗

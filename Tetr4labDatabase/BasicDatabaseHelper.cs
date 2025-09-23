@@ -25,7 +25,7 @@ public static class BasicDatabaseHelper {
         catch (Exception ex) when (BasicDataSetException.TryGetStatus (ex, out var status)) {
             // エラー扱いの例外
             await database.AbortTransactionAsync ();
-            System.Diagnostics.Debug.WriteLine (ex);
+            System.Diagnostics.Trace.WriteLine (ex);
             if (status == Status.CommandTimeout) {
                 // タイムアウトならエスカレート
                 throw;

@@ -28,7 +28,7 @@ public abstract class MySqlDataSet : BasicDataSet {
                 }
                 catch (MySqlException ex) when (ex.Message.StartsWith ("Unknown system variable")) {
                     // MariaDBはこの変数をサポートしていない
-                    System.Diagnostics.Debug.WriteLine ($"Server not supported 'information_schema_stats_expiry'\n{ex}");
+                    System.Diagnostics.Trace.WriteLine ($"Server not supported 'information_schema_stats_expiry'\n{ex}");
                 }
                 // 次の自動更新値の取得
                 Id = await database.SingleAsync<long> (
@@ -41,7 +41,7 @@ public abstract class MySqlDataSet : BasicDataSet {
             }
         }
         catch (Exception ex) {
-            System.Diagnostics.Debug.WriteLine ($"Get auto_increment number\n{ex}");
+            System.Diagnostics.Trace.WriteLine ($"Get auto_increment number\n{ex}");
         }
         if (Id <= 0) {
             // 開始Idの取得に失敗

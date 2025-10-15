@@ -15,13 +15,13 @@
         <Description>a private library for PetaPoco / SQLite</Description>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <PackageId>$(AssemblyName)</PackageId>
-        <Version>1.1.3</Version>
+        <Version>1.1.4</Version>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="PetaPoco.Compiled" Version="6.0.683" />
-        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.20" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.21" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

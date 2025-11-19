@@ -17,7 +17,7 @@ public class MySqlDatabase : Database {
     public MySqlDatabase (string connectionString, DbProviderFactory factory, IMapper? defaultMapper = null) : base (connectionString, factory, defaultMapper) { }
     /// <summary>PetaPoco.Databaseのラッパー</summary>
     public MySqlDatabase (string connectionString, IProvider provider, IMapper? defaultMapper = null) : base (connectionString, provider, defaultMapper) { }
-    /// <summary>連外が発生</summary>
+    /// <summary>例外が発生</summary>
     /// <param name="ex">例外</param>
     /// <returns>真なら昇格</returns>
     public override bool OnException (Exception ex) {

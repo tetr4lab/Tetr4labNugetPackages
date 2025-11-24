@@ -12,7 +12,7 @@ public class SqliteDataSetException : BasicDataSetException {
     /// <summary>コンストラクタ</summary>
     public SqliteDataSetException (string message, Exception innerException) : base (message, innerException) { }
     /// <summary>例外メッセージからエラーへの変換</summary>
-    public new static readonly Dictionary<(Type type, string message), Status> ExceptionToErrorDictionary = new () {
+    public override Dictionary<(Type type, string message), Status> ExceptionToErrorDictionary { get; } = new () {
         { (typeof (SqliteDataSetException), "Missing entry"), Status.MissingEntry },
         { (typeof (SqliteDataSetException), "Duplicate entry"), Status.DuplicateEntry },
         { (typeof (SqliteDataSetException), "The Command Timeout expired"), Status.CommandTimeout },

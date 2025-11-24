@@ -231,8 +231,34 @@ public abstract class BasicDataSet {
     /// <typeparam name="T">返す値の型</typeparam>
     /// <param name="process">処理</param>
     /// <returns>成功またはエラーの状態と値のセット</returns>
-    public virtual async Task<Result<T>> ProcessAndCommitAsync<T> (Func<Task<T>> process)
-        => await database.ProcessAndCommitAsync (process);
+    public virtual async Task<Result<T>> ProcessAndCommitAsync<T> (Func<Task<T>> process) {
+        var result = default (T)!;
+        await database.BeginTransactionAsync ();
+        try {
+            result = await process ();
+            await database.CompleteTransactionAsync ();
+            return new (Status.Success, result);
+        }
+        catch (BasicDataSetException ex) when (ex.IsDeadLock (ex)) {
+            await database.AbortTransactionAsync ();
+            // デッドロックならエスカレート
+            throw;
+        }
+        catch (BasicDataSetException ex) when (ex.TryGetStatus (ex, out var status)) {
+            // エラー扱いの例外
+            await database.AbortTransactionAsync ();
+            System.Diagnostics.Trace.WriteLine (ex);
+            if (status == Status.CommandTimeout) {
+                // タイムアウトならエスカレート
+                throw;
+            }
+            return new (status, result);
+        }
+        catch (Exception) {
+            await database.AbortTransactionAsync ();
+            throw;
+        }
+    }
 
     /// <summary>一覧セットをアトミックに取得</summary>
     /// <returns>成否</returns>

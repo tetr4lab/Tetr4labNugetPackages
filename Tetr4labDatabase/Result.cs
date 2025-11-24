@@ -42,8 +42,6 @@ public class Result<T> {
     public bool IsFatal => Status == Status.CommandTimeout || Status == Status.DeadlockFound;
     /// <summary>成功なら値、失敗なら例外</summary>
     public T ValueOrThrow => IsSuccess ? Value : throw new NotSupportedException (Status.ToString ());
-    /// <summary>逆引き</summary>
-    public Exception Exception => BasicDataSetException.GetException (Status);
     /// <summary>文字列化</summary>
     public override string ToString () => $"{{{Status}: {Value}}}";
 }

@@ -54,4 +54,49 @@ public abstract class MySqlDataSet : BasicDataSet {
     protected override async Task<int> GetLastInsertRowId () {
         return await database.ExecuteScalarAsync<int> ("select LAST_INSERT_ID();");
     }
+    /// <inheritdoc/>
+    /// <remarks>MySQL/MariaDBに依存</remarks>
+    public override async Task<Result<T>> ProcessAndCommitAsync<T> (Func<Task<T>> process) {
+        var result = default (T)!;
+        await database.BeginTransactionAsync ();
+        try {
+            result = await process ();
+            await database.CompleteTransactionAsync ();
+            return new (Status.Success, result);
+        }
+        catch (MySqlException ex) when (ex.Message.StartsWith ("Deadlock found")) {
+            await database.AbortTransactionAsync ();
+            // デッドロックならエスカレート
+            throw;
+        }
+        catch (MySqlException ex) when (MyDataSetException.TryGetStatus2 (ex, out var status)) {
+            // エラー扱いの例外
+            await database.AbortTransactionAsync ();
+            System.Diagnostics.Trace.WriteLine (ex);
+            if (status == Status.CommandTimeout) {
+                // タイムアウトならエスカレート
+                throw;
+            }
+            return new (status, result);
+        }
+        catch (BasicDataSetException ex) when (ex.IsDeadLock (ex)) {
+            await database.AbortTransactionAsync ();
+            // デッドロックならエスカレート
+            throw;
+        }
+        catch (BasicDataSetException ex) when (ex.TryGetStatus (ex, out var status)) {
+            // エラー扱いの例外
+            await database.AbortTransactionAsync ();
+            System.Diagnostics.Trace.WriteLine (ex);
+            if (status == Status.CommandTimeout) {
+                // タイムアウトならエスカレート
+                throw;
+            }
+            return new (status, result);
+        }
+        catch (Exception) {
+            await database.AbortTransactionAsync ();
+            throw;
+        }
+    }
 }

@@ -34,8 +34,8 @@ public sealed class Account {
     private static async void LoadAsync () {
         await TaskEx.DelayUntil (() => connectionString is not null);
         using (var database = (Database) new MySqlDatabase (connectionString!, "MySqlConnector")) {
-            var keys = await database.GetListAsync<string> ("select `key` from policies;");
-            var users = await database.GetListAsync<Account> ("""
+            var keys = await database.FetchAsync<string> ("select `key` from policies;");
+            Users = await database.FetchAsync<Account> ("""
                 select users.email, users.`name`, users.common_name, group_concat(policies.`key`) as policies
                 from users
                 left join assigns on assigns.users_id = users.id
@@ -43,11 +43,7 @@ public sealed class Account {
                 group by users.email
                 ;
                 """);
-            if (!users.IsSuccess || !keys.IsSuccess) {
-                throw new MyDataSetException ($"Account load failure {{ {(users.IsSuccess ? "" : "users, ")} {(keys.IsSuccess ? "" : "policies, ")}}}");
-            }
-            Users = users.Value;
-            foreach (var key in keys.Value) {
+            foreach (var key in keys) {
                 EmailsInPolicy [key] = Users.FindAll (i => {
                     foreach (var k in i.Policies.Split (',')) {
                         if (k == key) { return true; }

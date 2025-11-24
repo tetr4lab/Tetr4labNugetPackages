@@ -7,25 +7,8 @@ using System.Threading.Tasks;
 namespace Tetr4lab;
 
 /// <summary>DataSet内部で使用する例外</summary>
-public interface IDataSetException {
-    /// <summary>例外がエラーか判定して該当するエラー状態を出力する</summary>
-    /// <param name="status"></param>
-    /// <returns></returns>
-    static abstract Exception GetException (Status status);
-    /// <summary>例外はデッドロックである</summary>
-    /// <param name="ex"></param>
-    /// <returns></returns>
-    static abstract bool IsDeadLock (Exception ex);
-    /// <summary>逆引き</summary>
-    /// <param name="ex"></param>
-    /// <param name="status"></param>
-    /// <returns></returns>
-    static abstract bool TryGetStatus (Exception ex, out Status status);
-}
-
-/// <summary>DataSet内部で使用する例外</summary>
 [Serializable]
-public class BasicDataSetException : Exception, IDataSetException {
+public class BasicDataSetException : Exception {
     /// <summary>コンストラクタ</summary>
     public BasicDataSetException () : base () { }
     /// <summary>コンストラクタ</summary>
@@ -33,12 +16,12 @@ public class BasicDataSetException : Exception, IDataSetException {
     /// <summary>コンストラクタ</summary>
     public BasicDataSetException (string message, Exception innerException) : base (message, innerException) { }
     /// <summary>例外メッセージからエラーへの変換</summary>
-    public static readonly Dictionary<(Type type, string message), Status> ExceptionToErrorDictionary = new ();
+    public virtual Dictionary<(Type type, string message), Status> ExceptionToErrorDictionary { get; } = new ();
     /// <summary>例外がエラーか判定して該当するエラー状態を出力する</summary>
     /// <param name="ex"></param>
     /// <param name="status"></param>
     /// <returns></returns>
-    public static bool TryGetStatus (Exception ex, out Status status) {
+    public virtual bool TryGetStatus (Exception ex, out Status status) {
         foreach (var pair in ExceptionToErrorDictionary) {
             if (ex.GetType () == pair.Key.type && ex.Message.StartsWith (pair.Key.message, StringComparison.CurrentCultureIgnoreCase)) {
                 status = pair.Value;
@@ -51,11 +34,11 @@ public class BasicDataSetException : Exception, IDataSetException {
     /// <summary>例外はデッドロックである</summary>
     /// <param name="ex"></param>
     /// <returns></returns>
-    public static bool IsDeadLock (Exception ex) => false;
+    public virtual bool IsDeadLock (Exception ex) => false;
     /// <summary>逆引き</summary>
     /// <param name="status"></param>
     /// <returns></returns>
-    public static Exception GetException (Status status) {
+    public virtual Exception GetException (Status status) {
         if (ExceptionToErrorDictionary.ContainsValue (status)) {
             return new BasicDataSetException (ExceptionToErrorDictionary.First (p => p.Value == status).Key.message);
         }

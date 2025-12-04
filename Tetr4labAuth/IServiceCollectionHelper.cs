@@ -11,13 +11,16 @@ public static partial class IServiceCollectionHelper {
     /// <param name="services">DIサービスコレクション</param>
     /// <param name="crlientId">Google OAuth2 クライアントID</param>
     /// <param name="clientSecret">Google OAuth2 クライアントシークレット</param>
-    /// <example>
+    /// <remarks>
+    /// Google OAuth2を使用したクッキー認証を構成します。
+    /// Program.csで、例えば以下のように使用します。
+    /// <example><code>
     /// // クッキーとグーグルの認証を構成
     /// builder.Services.AddAuthentication (
     ///     builder.Configuration ["Authentication:Google:ClientId"]!,
     ///     builder.Configuration ["Authentication:Google:ClientSecret"]!
     /// );
-    /// </example>
+    /// </code></example></remarks>
     public static void AddAuthentication (this IServiceCollection services, string crlientId, string clientSecret) {
         services.AddAuthentication (options => {
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -34,10 +37,13 @@ public static partial class IServiceCollectionHelper {
     /// <param name="services">DIサービスコレクション</param>
     /// <param name="connectionString">接続文字列</param>
     /// <returns></returns>
-    /// <example>
+    /// <remarks>
+    /// `accounts`DBの内容に基づいて認可ポリシーを構成します。
+    /// Program.csで、例えば以下のように使用します。
+    /// <example><code>
     /// // メールアドレスを保持するクレームを要求する認可用のポリシーを構成
     /// await builder.Services.AddAuthorizationAsync ($"database=accounts;{builder.Configuration.GetConnectionString ("Host")}{builder.Configuration.GetConnectionString ("Account")}Allow User Variables=true;");
-    /// </example>
+    /// </code></example></remarks>
     public static async Task AddAuthorizationAsync (this IServiceCollection services, string connectionString) {
         await Account.InitializeAsync (connectionString);
         services.AddAuthorization (options => {
@@ -52,7 +58,10 @@ public static partial class IServiceCollectionHelper {
     /// <param name="connectionString">接続文字列</param>
     /// <param name="claimConvert">クレームの変換辞書 (実際の認可名 ⇒ Accountの登録名)</param>
     /// <returns></returns>
-    /// <example>
+    /// <remarks>
+    /// 辞書で変換された名称を使用して、`accounts`DBの内容に基づいて認可ポリシーを構成します。
+    /// Program.csで、例えば以下のように使用します。
+    /// <example><code>
     /// // メールアドレスを保持するクレームを要求する認可用のポリシーを構成
     /// await builder.Services.AddAuthorizationAsync (
     ///     $"database=accounts;{builder.Configuration.GetConnectionString ("Host")}{builder.Configuration.GetConnectionString ("Account")}Allow User Variables=true;",
@@ -61,7 +70,7 @@ public static partial class IServiceCollectionHelper {
     ///         { "Users", "Family" },
     ///     }
     /// );
-    /// </example>
+    /// </code></example></remarks>
     public static async Task AddAuthorizationAsync (this IServiceCollection services, string connectionString, Dictionary<string, string> claimConvert) {
         await Account.InitializeAsync (connectionString);
         services.AddAuthorization (options => {

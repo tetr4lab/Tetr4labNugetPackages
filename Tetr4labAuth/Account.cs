@@ -6,6 +6,34 @@ namespace Tetr4lab;
 /// <remarks>
 /// 初期化時にDBからアカウント情報を取得し認可ポリシーを構成する
 /// 情報は一度だけ取得され、静的に保持される (事実上のシングルトンとしてセッション間で共有)
+/// <br/><br/>
+/// 前提となるテーブル構造:
+/// <code>
+/// CREATE TABLE `users` (
+///   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+///   `email` varchar(50) NOT NULL,
+///   `name` varchar(50) NOT NULL,
+///   `common_name` varchar(50) NOT NULL,
+///   `description` longtext DEFAULT NULL,
+///   PRIMARY KEY (`id`),
+///   UNIQUE KEY `email` (`email`)
+/// ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/// 
+/// CREATE TABLE `policies` (
+///   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+///   `key` varchar(50) NOT NULL,
+///   `name` longtext NOT NULL,
+///   `description` longtext DEFAULT NULL,
+///   PRIMARY KEY (`id`),
+///   UNIQUE KEY `name` (`key`) USING BTREE
+/// ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/// 
+/// CREATE TABLE `assigns` (
+///   `users_id` bigint(20) NOT NULL,
+///   `policies_id` bigint(20) NOT NULL,
+///   PRIMARY KEY (`users_id`,`policies_id`) USING BTREE
+/// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+/// </code>
 /// </remarks>
 public sealed class Account {
 

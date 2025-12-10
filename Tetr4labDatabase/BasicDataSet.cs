@@ -17,7 +17,7 @@ public abstract class BasicDataSet {
     protected virtual int RetryInterval => 1000 / 30;
 
     /// <summary>PetaPocoをDI</summary>
-    protected virtual Database database { get; set; }
+    public virtual Database database { get; init; }
 
     /// <summary>データベース名</summary>
     protected string databaseName = "";

@@ -23,11 +23,11 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     /// <summary>バージョン</summary>
     [Column ("version"), Required] public int Version { get; set; }
     /// <summary>生成日時</summary>
-    [Column ("created"), VirtualColumn] public DateTime Created { get; set; }
+    [ResultColumn ("created")] public DateTime Created { get; set; }
     /// <summary>生成者</summary>
     [Column ("creator")] public string Creator { get; set; } = "";
     /// <summary>更新日時</summary>
-    [Column ("modified"), VirtualColumn] public DateTime Modified { get; set; }
+    [ResultColumn ("modified")] public DateTime Modified { get; set; }
     /// <summary>更新者</summary>
     [Column ("modifier")] public string Modifier { get; set; } = "";
     /// <summary>備考</summary>

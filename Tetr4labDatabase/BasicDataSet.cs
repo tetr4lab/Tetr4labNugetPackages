@@ -111,7 +111,7 @@ public abstract class BasicDataSet {
     }
 
     /// <summary>更新用カラム&amp;値SQL</summary>
-    /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
+    /// <remarks>ColumnでありかつResultColumn(VirtualColumn)でないプロパティだけを対象とする</remarks>
     /// <typeparam name="T"></typeparam>
     /// <param name="withId"></param>
     /// <returns></returns>
@@ -121,8 +121,9 @@ public abstract class BasicDataSet {
         if (properties != null) {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
+                var resultColumn = property.GetCustomAttribute<ResultColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
+                return @virtual == null && resultColumn == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"`{attribute.Name ?? property.Name}`=@{property.Name}"
                     : "";
             }).ToList ().FindAll (i => i != ""));
@@ -131,7 +132,7 @@ public abstract class BasicDataSet {
     }
 
     /// <summary>追加用値SQL</summary>
-    /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
+    /// <remarks>ColumnでありかつResultColumn(VirtualColumn)でないプロパティだけを対象とする</remarks>
     /// <typeparam name="T"></typeparam>
     /// <param name="index"></param>
     /// <param name="withId"></param>
@@ -142,8 +143,9 @@ public abstract class BasicDataSet {
         if (properties != null) {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
+                var resultColumn = property.GetCustomAttribute<ResultColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
+                return @virtual == null && resultColumn == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"@{property.Name}{(index >= 0 ? $"_{index}" : "")}"
                     : "";
             }).ToList ().FindAll (i => i != ""));
@@ -152,7 +154,7 @@ public abstract class BasicDataSet {
     }
 
     /// <summary>追加用カラムSQL</summary>
-    /// <remarks>ColumnでありかつVirtualColumnでないプロパティだけを対象とする</remarks>
+    /// <remarks>ColumnでありかつResultColumn(VirtualColumn)でないプロパティだけを対象とする</remarks>
     /// <typeparam name="T"></typeparam>
     /// <param name="withId"></param>
     /// <returns></returns>
@@ -162,8 +164,9 @@ public abstract class BasicDataSet {
         if (properties != null) {
             result = string.Join (',', Array.ConvertAll (properties, property => {
                 var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
+                var resultColumn = property.GetCustomAttribute<ResultColumnAttribute> ();
                 var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-                return @virtual == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
+                return @virtual == null && resultColumn == null && attribute != null && (withId || !(attribute.Name ?? property.Name).Equals ("Id", StringComparison.OrdinalIgnoreCase))
                     ? $"`{attribute.Name ?? property.Name}`"
                     : "";
             }).ToList ().FindAll (i => i != ""));
@@ -203,6 +206,7 @@ public abstract class BasicDataSet {
     }
 
     /// <summary>アイテムリストから辞書型パラメータを生成する</summary>
+    /// <remarks>ColumnでありかつResultColumn(VirtualColumn)でないプロパティだけを対象とする</remarks>
     /// <typeparam name="T"></typeparam>
     /// <param name="values"></param>
     /// <param name="withId"></param>
@@ -211,8 +215,10 @@ public abstract class BasicDataSet {
         var parameters = new Dictionary<string, object?> ();
         var prpperties = new List<PropertyInfo> ();
         foreach (var property in typeof (T).GetProperties (BindingFlags.Instance | BindingFlags.Public) ?? []) {
+            var @virtual = property.GetCustomAttribute<VirtualColumnAttribute> ();
+            var resultColumn = property.GetCustomAttribute<ResultColumnAttribute> ();
             var attribute = property.GetCustomAttribute<ColumnAttribute> ();
-            if (attribute != null && property.GetCustomAttribute<VirtualColumnAttribute> () == null
+            if (attribute != null && @virtual == null && resultColumn == null
                 && (withId || (attribute.Name ?? property.Name) != "Id")) {
                 prpperties.Add (property);
             }

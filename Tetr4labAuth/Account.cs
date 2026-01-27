@@ -93,5 +93,5 @@ public sealed class Account {
     /// <summary>通称</summary>
     [Column ("common_name")] public string CommonName { get; set; } = "";
     /// <summary>ポリシー</summary>
-    [Column ("policies"), VirtualColumn] public string Policies { get; set; } = "";
+    [ResultColumn ("policies")] public string Policies { get; set; } = "";
 }

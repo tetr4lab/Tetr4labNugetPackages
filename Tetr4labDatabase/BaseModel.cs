@@ -34,10 +34,10 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     [Column ("remarks")] public string? Remarks { get; set; }
 
     /// <summary>母集合</summary>
-    public virtual BasicDataSet DataSet { get; set; } = default!;
+    public virtual BasicDataSet? DataSet { get; set; }
 
     /// <summary>母集合</summary>
-    public virtual List<T> Table => DataSet.GetList<T> ();
+    public virtual List<T> Table => DataSet?.GetList<T> () ?? new ();
 
     /// <summary>母集合の初期化</summary>
     /// <param name="set"></param>

@@ -88,31 +88,45 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
         PropertyChanged?.Invoke (this, new PropertyChangedEventArgs (propertyName));
     }
 
+    /// <summary>一般プロパティ</summary>
+    protected virtual Dictionary<string, object> Properties { get; set; } = new ();
+
+    /// <summary>キーが含まれているか確認</summary>
+    /// <param name="key">キー</param>
+    /// <returns>成否</returns>
+    public virtual bool ContainsKey (string key) => Properties.ContainsKey (key);
+
+    /// <summary>キーに対応する値の取得</summary>
+    /// <typeparam name="T">値の型</typeparam>
+    /// <param name="key">キー</param>
+    /// <returns>値</returns>
+    public virtual T GetProperty<T> (string key) => (T) Properties [key];
+
+    /// <summary>キーに対応する値を設定</summary>
+    /// <param name="key">キー</param>
+    /// <param name="value">値</param>
+    public virtual void SetProperty (string key, object value) {
+        if (Properties.ContainsKey (key)){
+            if (!Properties [key].Equals (value)) {
+                Properties [key] = value;
+            }
+        } else {
+            Properties.Add (key, value);
+        }
+        OnPropertyChanged (key);
+    }
+
     /// <summary>アプリのモード</summary>
     public virtual TEnum CurrentMode {
-        get => _currentMode;
-        protected set {
-            if (!_currentMode.Equals (value)) {
-                _currentMode = value;
-                OnPropertyChanged ();
-            }
-        }
+        get => Properties.ContainsKey (nameof (CurrentMode)) ? GetProperty<TEnum> (nameof (CurrentMode)) : (TEnum) (object) DefaultMode;
+        protected set => SetProperty (nameof (CurrentMode), value);
     }
-    /// <summary>現在のモード内部値</summary>
-    protected TEnum _currentMode = (TEnum) (object) DefaultMode;
 
     /// <summary>リクエストされたアプリモード</summary>
     public virtual TEnum RequestedMode {
-        get => _requestedMode;
-        protected set {
-            if (!_requestedMode.Equals (value)) {
-                _requestedMode = value;
-                OnPropertyChanged ();
-            }
-        }
+        get => Properties.ContainsKey (nameof (RequestedMode)) ? GetProperty<TEnum> (nameof (RequestedMode)) : (TEnum) (object) NoneMode;
+        protected set => SetProperty (nameof (RequestedMode), value);
     }
-    /// <summary>要求されたモード内部値</summary>
-    protected TEnum _requestedMode = (TEnum) (object) NoneMode;
 
     /// <summary>モードを設定</summary>
     /// <param name="mode">新しいモード</param>

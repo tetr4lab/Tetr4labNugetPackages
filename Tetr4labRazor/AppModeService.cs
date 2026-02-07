@@ -102,6 +102,13 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
     /// <returns>値</returns>
     public virtual T GetProperty<T> (string key) => (T) Properties [key];
 
+    /// <summary>キーに対応する値またはデフォルト値の取得</summary>
+    /// <typeparam name="T">値の型</typeparam>
+    /// <param name="key">キー</param>
+    /// <param name="defaultValue">デフォルト値</param>
+    /// <returns>キーに対応する値、キーがなければデフォルト値</returns>
+    public virtual T GetProperty<T> (string key, T defaultValue) => Properties.ContainsKey (key) ? GetProperty<T> (key) : defaultValue;
+
     /// <summary>キーに対応する値を設定</summary>
     /// <param name="key">キー</param>
     /// <param name="value">値</param>
@@ -118,13 +125,13 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
 
     /// <summary>アプリのモード</summary>
     public virtual TEnum CurrentMode {
-        get => Properties.ContainsKey (nameof (CurrentMode)) ? GetProperty<TEnum> (nameof (CurrentMode)) : (TEnum) (object) DefaultMode;
+        get => GetProperty<TEnum> (nameof (CurrentMode), (TEnum) (object) DefaultMode);
         protected set => SetProperty (nameof (CurrentMode), value);
     }
 
     /// <summary>リクエストされたアプリモード</summary>
     public virtual TEnum RequestedMode {
-        get => Properties.ContainsKey (nameof (RequestedMode)) ? GetProperty<TEnum> (nameof (RequestedMode)) : (TEnum) (object) NoneMode;
+        get => GetProperty<TEnum> (nameof (RequestedMode), (TEnum) (object) NoneMode);
         protected set => SetProperty (nameof (RequestedMode), value);
     }
 

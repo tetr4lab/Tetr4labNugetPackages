@@ -114,7 +114,7 @@ public class AppModeService<TEnum> : IAppModeService<TEnum>, INotifyPropertyChan
     /// <param name="value">値</param>
     public virtual void SetProperty (string key, object value) {
         if (Properties.ContainsKey (key)){
-            if (!Properties [key].Equals (value)) {
+            if (Properties [key]?.Equals (value) != true) {
                 Properties [key] = value;
             }
         } else {

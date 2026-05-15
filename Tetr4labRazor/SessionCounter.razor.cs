@@ -23,6 +23,8 @@ namespace Tetr4lab;
 /// </example>
 /// </remark>
 public partial class SessionCounter : ComponentBase, IDisposable {
+    /// <summary>表示単位</summary>
+    [Parameter] public string Unit { get; set; } = "user";
 
     /// <summary>インスタンス数</summary>
     public static int Count => _instances.Count;

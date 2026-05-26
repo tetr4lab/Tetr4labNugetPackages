@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Collections.Immutable;
+using Microsoft.AspNetCore.Components;
 
 namespace Tetr4lab;
 
@@ -24,10 +25,16 @@ namespace Tetr4lab;
 /// </remark>
 public partial class SessionCounter : ComponentBase, IDisposable {
     /// <summary>表示単位</summary>
-    [Parameter] public string Unit { get; set; } = "user";
+    [Parameter] public string Unit { get; set; } = "conn";
+
+    /// <summary>セッション識別子</summary>
+    [Parameter] public string? SessionIdentifier { get; set; }
 
     /// <summary>インスタンス数</summary>
     public static int Count => _instances.Count;
+
+    /// <summary>セッション</summary>
+    public static ImmutableList<string> Sessions => _instances.ConvertAll (x => x.SessionIdentifier).Distinct ().Where (x => !string.IsNullOrWhiteSpace (x)).Cast<string> ().ToImmutableList ();
 
     /// <summary>インスタンス一覧</summary>
     protected static List<SessionCounter> _instances { get; set; } = new List<SessionCounter> ();

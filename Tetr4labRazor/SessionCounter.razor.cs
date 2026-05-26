@@ -30,6 +30,9 @@ public partial class SessionCounter : ComponentBase, IDisposable {
     /// <summary>セッション識別子</summary>
     [Parameter] public string? SessionIdentifier { get; set; }
 
+    /// <summary>不可視</summary>
+    [Parameter] public bool Invisible { get; set; }
+
     /// <summary>インスタンス数</summary>
     public static int Count => _instances.Count;
 
@@ -41,6 +44,9 @@ public partial class SessionCounter : ComponentBase, IDisposable {
 
     /// <summary>購読者一覧</summary>
     protected static Dictionary<ComponentBase, Action> _subscribers { get; set; } = new Dictionary<ComponentBase, Action> ();
+
+    /// <summary>表示されないけどアクティブにするスタイル</summary>
+    protected const string NotDisplayButActiveStyle = "position: absolute; width: 0px; height: 0px; overflow: hidden; opacity: 0; pointer-events: none;";
 
     /// <summary>登録/削除と全体更新</summary>
     /// <param name="newOne"></param>

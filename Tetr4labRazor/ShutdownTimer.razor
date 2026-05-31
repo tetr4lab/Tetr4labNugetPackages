@@ -1,0 +1,20 @@
+﻿@namespace Tetr4lab
+
+<script>
+    (function () {
+        function checkMaintenanceTime() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const startMinutes = @(StartTime.Hour * 60 + StartTime.Minute);
+            const endMinutes = @(EndTime.Hour * 60 + EndTime.Minute);
+            const targetUrl = '@(TargetUrl.StartsWith('/') ? TargetUrl : $"/{TargetUrl}")';
+            if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+                if (window.location.pathname !== targetUrl) {
+                    window.location.href = targetUrl;
+                }
+            }
+        }
+        checkMaintenanceTime();
+        setInterval(checkMaintenanceTime, @Timertick);
+    })();
+</script>

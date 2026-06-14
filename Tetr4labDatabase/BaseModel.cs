@@ -53,17 +53,7 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
 
     /// <summary>クローン</summary>
     /// <returns></returns>
-    public virtual T Clone ()
-        => new T {
-            DataSet = DataSet,
-            Id = Id,
-            Version = Version,
-            Created = Created,
-            Creator = Creator,
-            Modified = Modified,
-            Modifier = Modifier,
-            Remarks = Remarks,
-        };
+    public virtual T Clone () => CopyTo (new ());
 
     /// <summary>値のコピー</summary>
     /// <param name="destination"></param>
@@ -81,16 +71,23 @@ public abstract class BaseModel<T> : IEquatable<T> where T : BaseModel<T>, new()
     }
 
     /// <summary>内容の比較</summary>
+    /// <remarks>生成・更新・バージョン関連は対象外</remarks>
     /// <param name="other"></param>
     /// <returns></returns>
-    public abstract bool Equals (T? other);
+    public virtual bool Equals (T? other) =>
+        other is not null
+        && Id == other.Id
+        && Remarks == other.Remarks
+    ;
 
     /// <summary>内容の比較</summary>
+    /// <remarks>生成・更新・バージョン関連は対象外</remarks>
     /// <param name="obj"></param>
     /// <returns></returns>
     public override bool Equals (object? obj) => Equals (obj as T);
 
     /// <summary>ハッシュコードの取得</summary>
+    /// <remarks>生成・更新・バージョン関連は対象外</remarks>
     /// <returns></returns>
-    public override int GetHashCode () => HashCode.Combine (Id, Version, Created, Creator, Modified, Modifier, Remarks);
+    public override int GetHashCode () => HashCode.Combine (Id, Remarks);
 }

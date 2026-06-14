@@ -1,6 +1,6 @@
 ﻿using MySqlConnector;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db.MySql;
 
 /// <summary>内部で使用する例外</summary>
 [Serializable]

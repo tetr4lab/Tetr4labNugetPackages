@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Tetr4lab; 
+namespace Tetr4lab.Razor; 
 
 /// <summary>アプリのモード</summary>
 public enum BasicAppMode {

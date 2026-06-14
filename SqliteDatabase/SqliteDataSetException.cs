@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db.Sqlite;
 
 /// <summary>内部で使用する例外</summary>
 [Serializable]

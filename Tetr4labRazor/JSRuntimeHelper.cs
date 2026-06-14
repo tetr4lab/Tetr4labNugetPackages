@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>要素の位置とサイズ</summary>
 public class ElementRect {

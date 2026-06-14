@@ -1,4 +1,4 @@
-﻿namespace Tetr4lab;
+﻿namespace Tetr4lab.Db;
 
 /// <summary>結果の状態</summary>
 public enum Status {

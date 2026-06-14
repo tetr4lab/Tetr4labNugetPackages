@@ -1,7 +1,7 @@
 ﻿using PetaPoco;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db;
 
 /// <summary>モデルに必要な静的プロパティ</summary>
 public interface IBaseModel {

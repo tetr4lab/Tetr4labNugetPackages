@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Wasm;
 
 /// <summary>DIサービスコレクション拡張</summary>
 public static partial class IServiceCollectionHelper {

@@ -1,6 +1,6 @@
 ﻿using PetaPoco;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Auth;
 
 /// <summary>アカウントクラス</summary>
 /// <remarks>
@@ -58,7 +58,6 @@ public sealed class Account {
     static Account () => LoadAsync ();
 
     /// <summary>読み込み</summary>
-    /// <exception cref="MyDataSetException"></exception>
     private static async void LoadAsync () {
         await TaskEx.DelayUntil (() => connectionString is not null);
         using (var database = (Database) new MySqlDatabase (connectionString!, "MySqlConnector")) {

@@ -1,5 +1,5 @@
 ﻿using PetaPoco;
-namespace Tetr4lab;
+namespace Tetr4lab.Db;
 
 /// <summary>仮想カラム属性</summary>
 /// <remarks>

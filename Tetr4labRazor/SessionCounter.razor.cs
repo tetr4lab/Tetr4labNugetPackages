@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.AspNetCore.Components;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>セッションカウンタを表示するコンポーネントとセッション数の更新通知サービス</summary>
 /// <remark>

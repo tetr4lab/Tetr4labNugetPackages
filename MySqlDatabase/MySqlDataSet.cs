@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MySqlConnector;
 using PetaPoco;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db.MySql;
 
 /// <summary>MySQL/MariaDBに依存</summary>
 public abstract class MySqlDataSet : BasicDataSet {

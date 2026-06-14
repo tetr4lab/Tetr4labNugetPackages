@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Auth;
 
 /// <summary>DIサービスコレクション拡張</summary>
 public static partial class IServiceCollectionHelper {

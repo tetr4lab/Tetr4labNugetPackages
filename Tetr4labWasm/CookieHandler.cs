@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Wasm;
 
 /// <summary>クッキーを加える処理</summary>
 public class CookieHandler : DelegatingHandler {

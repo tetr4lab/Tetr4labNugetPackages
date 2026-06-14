@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>UIロックを管理する</summary>
 /// <remarks><example>Program.cs でのサービス登録<code>

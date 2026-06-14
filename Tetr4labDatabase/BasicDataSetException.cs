@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db;
 
 /// <summary>DataSet内部で使用する例外</summary>
 [Serializable]

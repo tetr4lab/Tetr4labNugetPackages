@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Auth;
 
 /// <summary>AuthenticationState拡張</summary>
 public static partial class AuthStateHelper {

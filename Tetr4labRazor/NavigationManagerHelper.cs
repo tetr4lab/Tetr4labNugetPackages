@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>NavigationManager</summary>
 public static partial class NavigationManagerHelper {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>汎用のプログレスダイアログ</summary>
 public partial class ProgressDialog {

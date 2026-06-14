@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Server;
 
 /// <summary>切断の検出</summary>
 /// <example>

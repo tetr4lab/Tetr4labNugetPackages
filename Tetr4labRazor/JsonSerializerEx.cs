@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace Tetr4lab; 
+namespace Tetr4lab.Razor; 
 
 /// <summary>JsonSerializeer拡張</summary>
 public static class JsonSerializerEx {

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Auth;
 
 /// <summary>ID</summary>
 public class AuthedIdentity {

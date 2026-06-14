@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>毎日指定時間帯に指定ページへ遷移する</summary>
 /// <remarks>開きっぱなしのタブを指定ページに追い出す</remarks>

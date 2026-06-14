@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using MudBlazor;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>MudBlazor Icons拡張</summary>
 public static class MudIconsHelper {

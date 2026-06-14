@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Server;
 
 /// <summary>アプリ構成マネジャ拡張</summary>
 public static partial class ConfigurationManagerHelper {

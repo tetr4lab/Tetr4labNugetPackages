@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using MudBlazor;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Razor;
 
 /// <summary>スクロールマネジャの拡張</summary>
 public static class ScrollManagerHelper {

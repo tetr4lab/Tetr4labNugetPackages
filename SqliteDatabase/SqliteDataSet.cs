@@ -2,7 +2,7 @@
 using System.Reflection;
 using PetaPoco;
 
-namespace Tetr4lab;
+namespace Tetr4lab.Db.Sqlite;
 
 /// <summary>基礎的なデータセット</summary>
 public abstract class SqliteDataSet : BasicDataSet {

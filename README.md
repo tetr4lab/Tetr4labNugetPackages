@@ -2,6 +2,13 @@
 
 ```csharp
 using Tetr4lab;
+using Tetr4lab.Auth;
+using Tetr4lab.Db;
+using Tetr4lab.Db.Mysql;
+using Tetr4lab.Db.Sqlite;
+using Tetr4lab.Razor;
+using Tetr4lab.Server;
+using Tetr4lab.Wasm;
 ```
 
 ### NuGet Packages for Blazor
@@ -27,14 +34,22 @@ IServiceCollectionHelper,
 IBaseModel,
 BaseModel<T>,
 BasicDataSet,
-MyDataSetException,
 ExceptionToErrorHelper,
-MySqlDatabase,
 DatabaseHelper,
 enum Status,
 Result<T>,
 StatusHelper,
 VirtualColumnAttribute,
+
+##### Tetr4labMySqlDatabase
+MyDataSetException,
+MySqlDatabase,
+MySqlDataSet,
+
+##### Tetr4labSqliteDatabase
+SqliteDataSetExeption,
+SqliteDatabase,
+SqliteDataSet,
 
 ##### Tetr4labRazor
 ConfirmationDialog,

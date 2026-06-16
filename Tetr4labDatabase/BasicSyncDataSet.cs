@@ -31,7 +31,7 @@ public abstract class BasicSyncDataSet {
     public AuthedIdentity Identity { get; protected set; } = default!;
 
     /// <summary>ユーザID</summary>
-    public string UserIdentifier => Identity?.Identifier ?? string.Empty;
+    public string UserIdentifier => Identity?.Identifier ?? "unknown";
 
     /// <summary>初期化済み</summary>
     public bool IsInitialized { get; protected set; }
@@ -57,9 +57,15 @@ public abstract class BasicSyncDataSet {
 
     /// <summary>初期化</summary>
     protected virtual async Task InitializeAsync (bool done = true) {
-        Identity = await AuthStateProvider.AuthState.GetIdentityAsync () ?? throw new AuthenticationFailureException ("Identity is null");
-        if (done) {
-            IsInitialized = true;
+        var identity = await AuthStateProvider.AuthState.GetIdentityAsync ();
+        if (identity is null) {
+            Isfailure = true;
+            throw new AuthenticationFailureException ("Identity is null");
+        } else {
+            Identity = identity;
+            if (done) {
+                IsInitialized = true;
+            }
         }
     }
 

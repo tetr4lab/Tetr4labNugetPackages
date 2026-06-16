@@ -26,6 +26,7 @@ StringHelper,
 
 ##### Tetr4labAuth
 Account,
+AuthStateProvider,
 AuthStateHelper,
 AuthedIdentity,
 IServiceCollectionHelper,

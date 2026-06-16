@@ -458,9 +458,24 @@ public abstract class BasicSyncDataSet {
             return new (status, result);
         }
         catch (Exception ex) {
-            System.Diagnostics.Debug.WriteLine ($"Exception: {ex.Message}\n{ex.StackTrace}");
             database.AbortTransaction ();
+            System.Diagnostics.Trace.WriteLine (ex);
+            if (CatchException (ex, result, out var rc)) {
+                // 処理済みなら処理結果を返す
+                return rc;
+            }
+            // 未処理ならエスカレート
             throw;
         }
+    }
+
+    /// <summary>例外ハンドラ</summary>
+    /// <param name="ex">例外</param>
+    /// <param name="value">例外発生時の値</param>
+    /// <param name="result">処理結果</param>
+    /// <returns>処理済/未処理(エスカレート)</returns>
+    protected virtual bool CatchException<T> (Exception ex, T value, out Result<T> result) {
+        result = new (Status.Unknown, value);
+        return false;
     }
 }

@@ -53,53 +53,20 @@ public abstract class MySqlSyncDataSet : BasicSyncDataSet {
 
     /// <inheritdoc/>
     /// <remarks>MySQL/MariaDBに依存</remarks>
-    /// <summary>処理を実行しコミットする、例外またはエラーがあればロールバックする</summary>
-    /// <remarks>MySQL/MariaDBに依存</remarks>
-    /// <typeparam name="T">返す値の型</typeparam>
-    /// <param name="process">処理</param>
-    /// <returns>成功またはエラーの状態と値のセット</returns>
-    public override Result<T> ProcessAndCommit<T> (Func<T> process) {
-        var result = default (T)!;
-        database.BeginTransaction ();
-        try {
-            result = process ();
-            database.CompleteTransaction ();
-            return new (Status.Success, result);
-        }
-        catch (MySqlException ex) when (ex.Message.StartsWith ("Deadlock found")) {
-            database.AbortTransaction ();
+    protected override bool CatchException<T> (Exception ex, T value, out Result<T> result) {
+        if (ex is MySqlException && ex.Message.StartsWith ("Deadlock found")) {
             // デッドロックならエスカレート
-            throw;
-        }
-        catch (MySqlException ex) when (MyDataSetException.TryGetStatus2 (ex, out var status)) {
-            // エラー扱いの例外
-            database.AbortTransaction ();
-            System.Diagnostics.Trace.WriteLine (ex);
+            result = new (Status.DeadlockFound, value);
+            return false;
+        } else if (ex is MySqlException && MyDataSetException.TryGetStatus2 (ex, out var status)) {
+            result = new (status, value);
             if (status == Status.CommandTimeout) {
                 // タイムアウトならエスカレート
-                throw;
+                return false;
             }
-            return new (status, result);
-        }
-        catch (BasicDataSetException ex) when (ex.IsDeadLock (ex)) {
-            database.AbortTransaction ();
-            // デッドロックならエスカレート
-            throw;
-        }
-        catch (BasicDataSetException ex) when (ex.TryGetStatus (ex, out var status)) {
             // エラー扱いの例外
-            database.AbortTransaction ();
-            System.Diagnostics.Trace.WriteLine (ex);
-            if (status == Status.CommandTimeout) {
-                // タイムアウトならエスカレート
-                throw;
-            }
-            return new (status, result);
+            return true;
         }
-        catch (Exception ex) {
-            System.Diagnostics.Debug.WriteLine ($"Exception: {ex.Message}\n{ex.StackTrace}");
-            database.AbortTransaction ();
-            throw;
-        }
+        return base.CatchException (ex, value, out result);
     }
 }

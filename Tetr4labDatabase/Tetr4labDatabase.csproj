@@ -15,7 +15,7 @@
     <Description>a private library for PetaPoco</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>10.0.6</Version>
+    <Version>10.0.7</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -40,7 +40,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
+        <ProjectReference Include="..\Tetr4labAuth\Tetr4labAuth.csproj" />
+        <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
     </ItemGroup>
 
 </Project>

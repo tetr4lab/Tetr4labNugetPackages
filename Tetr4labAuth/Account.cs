@@ -60,7 +60,7 @@ public sealed class Account {
     /// <summary>読み込み</summary>
     private static async void LoadAsync () {
         await TaskEx.DelayUntil (() => connectionString is not null);
-        using (var database = (Database) new MySqlDatabase (connectionString!, "MySqlConnector")) {
+        using (var database = new Database (connectionString!, "MySqlConnector")) {
             var keys = await database.FetchAsync<string> ("select `key` from policies;");
             Users = await database.FetchAsync<Account> ("""
                 select users.email, users.`name`, users.common_name, group_concat(policies.`key`) as policies

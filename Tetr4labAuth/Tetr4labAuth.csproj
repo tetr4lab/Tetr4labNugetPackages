@@ -16,7 +16,7 @@
     <Description>a private library for Auth</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>10.0.9</Version>
+    <Version>10.0.10</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -47,7 +47,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MySqlDatabase\Tetr4labMySqlDatabase.csproj" />
         <ProjectReference Include="..\Tetr4lab\Tetr4lab.csproj" />
     </ItemGroup>
 

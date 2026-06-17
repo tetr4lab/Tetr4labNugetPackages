@@ -89,14 +89,19 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
     public override int GetHashCode () => HashCode.Combine (Id, Remarks);
 
     /// <summary>コンストラクタの代用</summary>
+    /// <remarks>
+    /// 必要に応じて派生クラスでモデル独自の初期化を行う<br/>
+    /// 上書きの際は、必ず引数の<paramref name="dataSet"/>を使い、<see cref="DataSet"/>を含めて自身のメンバーは使用してはならない
+    /// </remarks>
     /// <param name="dataSet">データセット</param>
     /// <returns>モデルインスタンス</returns>
     protected virtual T CreateInstance (BasicSyncDataSet dataSet) => new () { DataSet = dataSet, };
 
     /// <summary>低レベル基本読み込み</summary>
     /// <remarks>
-    /// 派生クラスではモデル独自のマッピングを行う<br/>
-    /// ProcessAndCommit越しに呼ぶこと
+    /// 必要に応じて派生クラスでモデル独自のマッピングを行う<br/>
+    /// ProcessAndCommit越しに呼ぶこと<br/>
+    /// 上書きの際は、必ず引数の<paramref name="dataSet"/>を使い、<see cref="DataSet"/>を含めて自身のメンバーは使用してはならない
     /// </remarks>
     /// <param name="dataSet">データセット</param>
     /// <param name="sql">SQL</param>

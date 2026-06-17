@@ -39,11 +39,8 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
     /// <summary>備考</summary>
     [Column ("remarks")] public string? Remarks { get; set; }
 
-    /// <summary>母集合</summary>
-    public virtual BasicSyncDataSet? DataSet { get; set; }
-
     /// <summary>データセット</summary>
-    public virtual List<T> Table => DataSet?.GetList<T> () ?? new ();
+    public virtual BasicSyncDataSet? DataSet { get; set; }
 
     /// <summary>検索対象 (複数のカラムを参照)</summary>
     public abstract string? [] SearchTargets { get; }
@@ -115,7 +112,8 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
         return items;
     }
 
-    /// <summary>クラスメソッドからインスタンスメソッドを呼ぶための静的インスタンス</summary>
+    /// <summary>クラスメソッドからインスタンスメソッドを呼ぶための静的インスタンス(`static virtual`の代替)</summary>
+    /// <remarks>Virtual dispatch only.<br/>This instance must never hold state and must never be used for anything except invoking virtual members.</remarks>
     protected static T Dispatcher { get; } = new ();
 
     /// <summary>コンストラクタの代用</summary>

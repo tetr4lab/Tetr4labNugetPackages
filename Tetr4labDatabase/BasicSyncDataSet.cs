@@ -69,15 +69,6 @@ public abstract class BasicSyncDataSet {
         }
     }
 
-    /// <summary>指定クラスのモデルインスタンスを取得</summary>
-    /// <typeparam name="T">取得するモデルクラス</typeparam>
-    /// <returns>取得したモデルインスタンス</returns>
-    public virtual List<T> GetList<T> () where T : class
-        => ListSet.ContainsKey (typeof (T)) && ListSet [typeof (T)] is List<T> list ? list : new ();
-
-    /// <summary>ロード済みモデルインスタンス</summary>
-    public virtual Dictionary<Type, object> ListSet { get; protected set; } = new ();
-
     /// <summary>SQLで使用するテーブル名またはカラム名を得る</summary>
     /// <param name="name">プロパティ名</param>
     /// <returns>テーブル名またはカラム名</returns>

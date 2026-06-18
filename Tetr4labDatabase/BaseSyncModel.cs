@@ -14,7 +14,7 @@ public interface IBaseSyncModel<T> where T : IBaseSyncModel<T> {
     /// <summary>`order by ~`</summary>
     public static abstract string OrderSql { get; }
     /// <summary>データ取得SQL表現 `select ~ order (without where)`</summary>
-    public static abstract string BaseSelectSql { get; }
+    public static virtual string BaseSelectSql => $"{T.SelectSql} {T.OrderSql}";
     /// <summary>コンストラクタの代用</summary>
     public static abstract T Create (BasicSyncDataSet dataSet);
     /// <summary>基本テーブル読み込み</summary>

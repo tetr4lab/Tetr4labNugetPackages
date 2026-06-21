@@ -28,6 +28,9 @@ namespace Tetr4lab {
                 if (header.StartsWith ("1A45DFA3")) {
                     return "webm";
                 }
+                if (header.StartsWith ("4F676753")) {
+                    return "ogg";
+                }
                 if (header [8..16] == "66747970") {
                     return "mp4";
                 }
@@ -39,7 +42,7 @@ namespace Tetr4lab {
         /// <returns>データまたは空文字列</returns>
         public static string ToImageSource (this byte []? image) {
             var subType = image.DetectImageType ();
-            var type = subType == "webm" || subType == "mp4" ? "video" : "image";
+            var type = subType == "webm" || subType == "mp4" || subType == "ogg" ? "video" : "image";
             return image is null || image.Length < 8 ? string.Empty : $"data:{type}/{subType ?? "jpeg"};base64,{Convert.ToBase64String (image)}";
         }
     }

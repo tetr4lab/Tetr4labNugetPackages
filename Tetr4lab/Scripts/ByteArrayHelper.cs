@@ -25,14 +25,23 @@ namespace Tetr4lab {
                 if (header.StartsWith ("524946463A") && header [16..24] == "57454250") {
                     return "webp";
                 }
+                if (header.StartsWith ("1A45DFA3")) {
+                    return "webm";
+                }
+                if (header [8..16] == "66747970") {
+                    return "mp4";
+                }
             }
             return null;
         }
         /// <summary>埋め込み画像データ</summary>
         /// <param name="image">画像</param>
         /// <returns>データまたは空文字列</returns>
-        public static string ToImageSource (this byte []? image)
-            => image is null || image.Length < 8 ? string.Empty : $"data:image/{image.DetectImageType () ?? "jpeg"};base64,{Convert.ToBase64String (image)}";
+        public static string ToImageSource (this byte []? image) {
+            var subType = image.DetectImageType ();
+            var type = subType == "webm" || subType == "mp4" ? "video" : "image";
+            return image is null || image.Length < 8 ? string.Empty : $"data:{type}/{subType ?? "jpeg"};base64,{Convert.ToBase64String (image)}";
+        }
     }
 
 }

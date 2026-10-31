@@ -15,7 +15,7 @@
     <Description>a private library for blazor</Description>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageId>$(AssemblyName)</PackageId>
-    <Version>10.0.16</Version>
+    <Version>10.0.17</Version>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -28,7 +28,7 @@
   </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MudBlazor" Version="9.11.0" />
+        <PackageReference Include="MudBlazor" Version="9.12.0" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

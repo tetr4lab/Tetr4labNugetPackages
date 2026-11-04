@@ -6,7 +6,7 @@ namespace Tetr4lab {
     /// <summary>enumと文字列の相互変換</summary>
     /// <remarks>
     /// enumと<seealso cref="DescriptionAttribute"/>で定義した文字列またはメンバー名とを相互に変換します。<br/>
-    /// 文字列やenum値の重複、[Flags]はサポートされません。
+    /// 文字列やenum値の重複、<seealso cref="FlagsAttribute"/>([Flags])はサポートされません。
     /// </remarks>
     public static class EnumName<TEnum> where TEnum : struct, Enum {
         /// <summary>enumから文字列への変換辞書</summary>

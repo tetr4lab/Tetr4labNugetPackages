@@ -4,6 +4,10 @@ using System.Reflection;
 namespace Tetr4lab {
 
     /// <summary>enumと文字列の相互変換</summary>
+    /// <remarks>
+    /// enumと<seealso cref="DescriptionAttribute"/>で定義した文字列またはメンバー名とを相互に変換します。<br/>
+    /// 文字列やenum値の重複、[Flags]はサポートされません。
+    /// </remarks>
     public static class EnumName<TEnum> where TEnum : struct, Enum {
         /// <summary>enumから文字列への変換辞書</summary>
         private static readonly Dictionary<TEnum, string> _toNameDictionary;
@@ -14,8 +18,10 @@ namespace Tetr4lab {
         /// <summary>基底文字列化</summary>
         /// <param name="enum">カテゴリ</param>
         /// <returns>説明属性または単純文字列化</returns>
-        private static string ToBaseString (Enum @enum)
-            => @enum.GetType ().GetField (@enum.ToString ())?.GetCustomAttribute<DescriptionAttribute> () is DescriptionAttribute attribute ? attribute.Description : @enum.ToString ();
+        private static string ToBaseString (TEnum @enum) {
+            var name = @enum.ToString ();
+            return typeof (TEnum).GetField (name)?.GetCustomAttribute<DescriptionAttribute> ()?.Description ?? name;
+        }
 
         /// <summary>クラス初期化</summary>
         static EnumName () {
@@ -26,17 +32,23 @@ namespace Tetr4lab {
                 if (!_toEnumDictionary.TryAdd (name, @enum)) {
                     throw new InvalidEnumArgumentException ("enum name duplicated");
                 }
-                _toNameDictionary [@enum] = name;
+                if (!_toNameDictionary.TryAdd (@enum, name)) {
+                    throw new InvalidEnumArgumentException ("enum value duplicated");
+                }
             }
         }
 
         /// <summary>enumを文字列化</summary>
         public static string ToName (TEnum @enum)
-            => _toNameDictionary.TryGetValue (@enum, out var value) ? value : string.Empty;
+            => _toNameDictionary.TryGetValue (@enum, out var value) ? value : @enum.ToString ();
 
         /// <summary>文字列からenumを得る</summary>
-        public static TEnum ToEnum (string name)
-            => _toEnumDictionary.TryGetValue (name, out var value) ? value : Enum.TryParse<TEnum> (name, out var parsed) ? parsed : default;
+        public static TEnum ToEnum (string name, TEnum defaultValue = default)
+            => _toEnumDictionary.TryGetValue (name, out var value)
+                ? value
+                : Enum.TryParse<TEnum> (name, ignoreCase: false, out var parsed)
+                    ? parsed
+                    : defaultValue;
     }
 
 }

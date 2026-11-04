@@ -6,7 +6,7 @@ namespace Tetr4lab {
 
     /// <summary>型拡張</summary>
     public static class TypeHelper {
-        /// <summary>アセンブリバージョン取得</summary><summary>
+        /// <summary>アセンブリバージョン取得</summary>
         /// <param name="type">型</param>
         /// <returns>バージョン文字列</returns>
         public static string GetAssemblyVersion (this Type type) {

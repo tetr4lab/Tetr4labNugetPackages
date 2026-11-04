@@ -6,7 +6,7 @@ namespace Tetr4lab {
     /// <summary>enumと文字列の相互変換</summary>
     /// <remarks>
     /// enumと<seealso cref="DescriptionAttribute"/>で定義した文字列またはメンバー名とを相互に変換します。<br/>
-    /// 文字列やenum値の重複、<seealso cref="FlagsAttribute"/>([Flags])はサポートされません。
+    /// 文字列やenum値の重複、文字列とメンバー名の衝突、<seealso cref="FlagsAttribute"/>([Flags])、未定義の整数値や整数文字列を使用した場合の挙動は保証されません。
     /// </remarks>
     public static class EnumName<TEnum> where TEnum : struct, Enum {
         /// <summary>enumから文字列への変換辞書</summary>
@@ -25,15 +25,19 @@ namespace Tetr4lab {
 
         /// <summary>クラス初期化</summary>
         static EnumName () {
-            _toNameDictionary = new Dictionary<TEnum, string> ();
-            _toEnumDictionary = new Dictionary<string, TEnum> ();
+            if (typeof (TEnum).IsDefined (typeof (FlagsAttribute), false)) {
+                throw new InvalidOperationException (
+                    $"{typeof (TEnum).Name} does not support FlagsAttribute.");
+            }
+            _toNameDictionary = new ();
+            _toEnumDictionary = new (StringComparer.Ordinal);
             foreach (var @enum in Enum.GetValues<TEnum> ()) {
                 var name = ToBaseString (@enum);
                 if (!_toEnumDictionary.TryAdd (name, @enum)) {
-                    throw new InvalidEnumArgumentException ("enum name duplicated");
+                    throw new InvalidOperationException ($"Duplicate enum name: '{name}'={typeof (TEnum).Name}.{@enum}");
                 }
                 if (!_toNameDictionary.TryAdd (@enum, name)) {
-                    throw new InvalidEnumArgumentException ("enum value duplicated");
+                    throw new InvalidOperationException ($"Duplicate enum value: {typeof (TEnum).Name}.{@enum}='{name}'");
                 }
             }
         }
@@ -46,7 +50,7 @@ namespace Tetr4lab {
         public static TEnum ToEnum (string name, TEnum defaultValue = default)
             => _toEnumDictionary.TryGetValue (name, out var value)
                 ? value
-                : Enum.TryParse<TEnum> (name, ignoreCase: false, out var parsed)
+                : Enum.TryParse<TEnum> (name, ignoreCase: false, out var parsed) && Enum.IsDefined (parsed)
                     ? parsed
                     : defaultValue;
     }

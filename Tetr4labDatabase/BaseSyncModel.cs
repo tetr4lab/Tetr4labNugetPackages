@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using PetaPoco;
 
 namespace Tetr4lab.Db;
@@ -7,8 +9,6 @@ namespace Tetr4lab.Db;
 public interface IBaseSyncModel<T> where T : IBaseSyncModel<T> {
     /// <summary>テーブル名</summary>
     public static abstract string TableLabel { get; }
-    /// <summary>列の名前</summary>
-    public static abstract Dictionary<string, string> Label { get; }
     /// <summary>`select ~`</summary>
     public static abstract string SelectSql { get; }
     /// <summary>`order by ~`</summary>
@@ -25,19 +25,19 @@ public interface IBaseSyncModel<T> where T : IBaseSyncModel<T> {
 [PrimaryKey ("id", AutoIncrement = true), ExplicitColumns]
 public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T>, new() {
     /// <summary>識別子</summary>
-    [Column ("id"), Required] public long Id { get; set; }
+    [Column ("id"), Required, Description ("ID")] public long Id { get; set; }
     /// <summary>バージョン</summary>
-    [Column ("version"), Required] public int Version { get; set; }
+    [Column ("version"), Required, Description ("バージョン")] public int Version { get; set; }
     /// <summary>生成日時</summary>
-    [ResultColumn ("created")] public DateTime Created { get; set; }
+    [ResultColumn ("created"), Description ("生成日時")] public DateTime Created { get; set; }
     /// <summary>生成者</summary>
-    [Column ("creator")] public string Creator { get; set; } = "";
+    [Column ("creator"), Description ("生成者")] public string Creator { get; set; } = "";
     /// <summary>更新日時</summary>
-    [ResultColumn ("modified")] public DateTime Modified { get; set; }
+    [ResultColumn ("modified"), Description ("更新日時")] public DateTime Modified { get; set; }
     /// <summary>更新者</summary>
-    [Column ("modifier")] public string Modifier { get; set; } = "";
+    [Column ("modifier"), Description ("更新者")] public string Modifier { get; set; } = "";
     /// <summary>備考</summary>
-    [Column ("remarks")] public string? Remarks { get; set; }
+    [Column ("remarks"), Description ("備考")] public string? Remarks { get; set; }
 
     /// <summary>データセット</summary>
     public virtual BasicSyncDataSet? DataSet { get; set; }
@@ -127,4 +127,20 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
     /// <param name="args">引数</param>
     /// <returns>モデルインスタンスの一覧</returns>
     public static List<T> Fetch (BasicSyncDataSet dataSet, string sql, params object [] args) => Dispatcher.FetchInstances (dataSet, sql, args);
+
+    /// <summary>列ラベルの生成</summary>
+    public static Dictionary<string, string> CreateLabel () {
+        var labels = new Dictionary<string, string> ();
+        foreach (var property in typeof (T).GetProperties (BindingFlags.Public | BindingFlags.Instance)) {
+            var attribute = property.GetCustomAttribute<DescriptionAttribute> ();
+            if (attribute is not null) {
+                // Description
+                labels [property.Name] = attribute.Description;
+            } else if (!property.Name.StartsWith ('_') && property.IsDefined (typeof (ColumnAttribute))) {
+                // アンダースコアで始まらない名前のカラム
+                labels [property.Name] = property.Name;
+            }
+        }
+        return labels;
+    }
 }

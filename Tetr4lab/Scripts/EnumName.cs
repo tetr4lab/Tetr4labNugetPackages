@@ -6,7 +6,8 @@ namespace Tetr4lab {
     /// <summary>enumと文字列の相互変換</summary>
     /// <remarks>
     /// enumと<seealso cref="DescriptionAttribute"/>で定義した文字列またはメンバー名とを相互に変換します。<br/>
-    /// 文字列やenum値の重複、文字列とメンバー名の衝突、<seealso cref="FlagsAttribute"/>([Flags])、未定義の整数値や整数文字列を使用した場合の挙動は保証されません。
+    /// 文字列の重複、文字列と別のメンバー名の衝突、値の重複、<seealso cref="FlagsAttribute"/>([Flags])の使用は例外を投げます。<br/>
+    /// 未定義の整数値や整数文字列を使用した場合の挙動は保証されません。
     /// </remarks>
     public static class EnumName<TEnum> where TEnum : struct, Enum {
         /// <summary>enumから文字列への変換辞書</summary>
@@ -15,15 +16,10 @@ namespace Tetr4lab {
         /// <summary>文字列からenumへの変換辞書</summary>
         private static readonly Dictionary<string, TEnum> _toEnumDictionary;
 
-        /// <summary>基底文字列化</summary>
-        /// <param name="enum">カテゴリ</param>
-        /// <returns>説明属性または単純文字列化</returns>
-        private static string ToBaseString (TEnum @enum) {
-            var name = @enum.ToString ();
-            return typeof (TEnum).GetField (name)?.GetCustomAttribute<DescriptionAttribute> ()?.Description ?? name;
-        }
-
         /// <summary>クラス初期化</summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when using FlagsAttribute, duplicate enum value, duplicate enum name or description.
+        /// </exception>
         static EnumName () {
             if (typeof (TEnum).IsDefined (typeof (FlagsAttribute), false)) {
                 throw new InvalidOperationException (
@@ -31,13 +27,16 @@ namespace Tetr4lab {
             }
             _toNameDictionary = new ();
             _toEnumDictionary = new (StringComparer.Ordinal);
-            foreach (var @enum in Enum.GetValues<TEnum> ()) {
-                var name = ToBaseString (@enum);
-                if (!_toEnumDictionary.TryAdd (name, @enum)) {
-                    throw new InvalidOperationException ($"Duplicate enum name: '{name}'={typeof (TEnum).Name}.{@enum}");
+            var enumName = typeof (TEnum).Name;
+            foreach (var field in typeof (TEnum).GetFields (BindingFlags.Public | BindingFlags.Static)) {
+                var name = field.Name;
+                var value = (TEnum) field.GetValue (null)!;
+                var xname = field.GetCustomAttribute<DescriptionAttribute> ()?.Description ?? name;
+                if (!_toEnumDictionary.TryAdd (xname, value)) {
+                    throw new InvalidOperationException ($"Duplicate enum name: {enumName}.{name}='{xname}'={enumName}.{_toEnumDictionary [xname]}");
                 }
-                if (!_toNameDictionary.TryAdd (@enum, name)) {
-                    throw new InvalidOperationException ($"Duplicate enum value: {typeof (TEnum).Name}.{@enum}='{name}'");
+                if (!_toNameDictionary.TryAdd (value, xname)) {
+                    throw new InvalidOperationException ($"Duplicate enum value: {enumName}.{name}={enumName}.{value}");
                 }
             }
         }

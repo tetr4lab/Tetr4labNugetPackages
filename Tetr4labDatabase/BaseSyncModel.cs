@@ -136,7 +136,7 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
             if (attribute is not null) {
                 // Description
                 labels [property.Name] = attribute.Description;
-            } else if (!property.Name.StartsWith ('_') && property.IsDefined (typeof (ColumnAttribute))) {
+            } else if (!property.Name.StartsWith ('_') && (property.IsDefined (typeof (ColumnAttribute)) || property.IsDefined (typeof (ResultColumnAttribute)))) {
                 // アンダースコアで始まらない名前のカラム
                 labels [property.Name] = property.Name;
             }

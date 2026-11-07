@@ -9,6 +9,8 @@ namespace Tetr4lab.Db;
 public interface IBaseSyncModel<T> where T : IBaseSyncModel<T> {
     /// <summary>テーブル名</summary>
     public static abstract string TableLabel { get; }
+    /// <summary>列の名前</summary>
+    public static abstract Dictionary<string, string> Label { get; }
     /// <summary>`select ~`</summary>
     public static abstract string SelectSql { get; }
     /// <summary>`order by ~`</summary>

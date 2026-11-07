@@ -3,7 +3,7 @@
 namespace Tetr4lab {
 
     /// <summary>Byte配列拡張</summary>
-    public static class ByteArrayHelper {
+    public static partial class ByteArrayHelper {
         /// <summary>画像種別を判定</summary>
         /// <param name="image">画像</param>
         /// <returns>MIMEサブタイプまたは`null`</returns>

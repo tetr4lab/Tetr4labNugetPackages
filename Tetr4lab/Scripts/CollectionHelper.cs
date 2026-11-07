@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Tetr4lab {
 
     /// <summary>配列とコレクションの拡張</summary>
-    public static class CollectionHelper {
+    public static partial class CollectionHelper {
 
         /// <summary>入れ替え</summary>
         /// <typeparam name="T">型</typeparam>

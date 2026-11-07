@@ -129,18 +129,6 @@ public abstract class BaseSyncModel<T> : IEquatable<T> where T : BaseSyncModel<T
     public static List<T> Fetch (BasicSyncDataSet dataSet, string sql, params object [] args) => Dispatcher.FetchInstances (dataSet, sql, args);
 
     /// <summary>列ラベルの生成</summary>
-    public static Dictionary<string, string> CreateLabel () {
-        var labels = new Dictionary<string, string> ();
-        foreach (var property in typeof (T).GetProperties (BindingFlags.Public | BindingFlags.Instance)) {
-            var attribute = property.GetCustomAttribute<DescriptionAttribute> ();
-            if (attribute is not null) {
-                // Description
-                labels [property.Name] = attribute.Description;
-            } else if (!property.Name.StartsWith ('_') && (property.IsDefined (typeof (ColumnAttribute)) || property.IsDefined (typeof (ResultColumnAttribute)))) {
-                // アンダースコアで始まらない名前のカラム
-                labels [property.Name] = property.Name;
-            }
-        }
-        return labels;
-    }
+    /// <returns>辞書</returns>
+    public static Dictionary<string, string> CreateLabel () => typeof (T).CreateLabel ();
 }

@@ -5,7 +5,7 @@ using System.Globalization;
 namespace Tetr4lab {
 
     /// <summary>文字列クラス拡張</summary>
-    public static class StringHelper {
+    public static partial class StringHelper {
         /// <summary>曜日付きの短い日付表記に変換する</summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>

@@ -5,7 +5,7 @@ using System.Reflection;
 namespace Tetr4lab {
 
     /// <summary>型拡張</summary>
-    public static class TypeHelper {
+    public static partial class TypeHelper {
         /// <summary>アセンブリバージョン取得</summary>
         /// <param name="type">型</param>
         /// <returns>バージョン文字列</returns>

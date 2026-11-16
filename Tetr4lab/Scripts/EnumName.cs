@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Tetr4lab {
@@ -49,7 +51,7 @@ namespace Tetr4lab {
         public static TEnum ToEnum (string name, TEnum defaultValue = default)
             => _toEnumDictionary.TryGetValue (name, out var value)
                 ? value
-                : Enum.TryParse<TEnum> (name, ignoreCase: false, out var parsed) && Enum.IsDefined (parsed)
+                : Enum.TryParse<TEnum> (name, ignoreCase: false, out var parsed) && Enum.IsDefined (typeof (TEnum), parsed)
                     ? parsed
                     : defaultValue;
     }
